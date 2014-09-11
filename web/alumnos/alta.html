@@ -1,0 +1,63 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nuevo Alumno</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" name="alumno">
+            <fieldset>
+                <legend>Datos del nuevo alumno: </legend>
+
+                <div class="form-group">
+                    <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputNombre" placeholder="Nombre" type="text" ng-model="nombre" required pattern="\S{1,100}">
+                    </div>
+                </div>
+
+
+                <div class="form-group {{txt.apellido}}">
+                    <label for="inputApellido" class="col-lg-2 control-label">Apellido</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputApellido" placeholder="Apellido" type="text" ng-model="apellido" required pattern="\S{1,100}">
+                    </div>
+                </div>
+
+                <div class="form-group {{txt.cedula}}">
+                    <label for="inputCedula" class="col-lg-2 control-label">Numero de Cedula</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputCedula" placeholder="Cedula" type="text" ng-model="cedula" required pattern="[0-9]+">
+                    </div>
+                </div>
+
+                <div class="form-group {{txt.nacimiento}}">
+                    <label for="inputNacimiento" class="col-lg-2 control-label">Fecha de Nacimiento</label>
+                    <div class="col-lg-10">
+                        <input type='text' class="form-control" id="inputNacimiento" placeholder="AA-MM-DD" ng-model="nacimiento" required pattern="[0-9]{2}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])">
+                    </div>
+                </div>
+
+                <div class="form-group {{txt.responsable}}">
+                    <label for="inputResponsable" class="col-lg-2 control-label">Nombre del Responsable</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputResponsable" placeholder="Responsable" type="text" ng-model="responsable" required pattern="\S{1,200}">
+                    </div>
+                </div>
+                <div class="form-group {{txt.responsable_cedula}}">
+                    <label for="inputResponsable_cedula" class="col-lg-2 control-label">Cedula del Responsable</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputResponsable_cedula" placeholder="Responsable_cedula" type="text" ng-model="cedula_responsable" required pattern="[0-9]+">
+                    </div>    
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="reset" class="btn btn-default">Cancel</button>
+                        <button class="btn btn-primary" ng-click="alta()">Crear</button>
+                    </div>
+                </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </div>
+</div>

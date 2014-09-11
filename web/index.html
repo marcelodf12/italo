@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html ng-app="italo"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/calendario.css">
+
+        <script src="angular/angular.min.js"></script>
+        <script src="js/apps.js"></script>
+        <script src="angular/angular-route.js"></script>
+
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- Header -->
+                    <table>
+                        <tr>
+                            <td><IMG SRC="images/insignia.jpg" WIDTH=90 HEIGHT=100></td>
+                            <td>
+                                <h1>&nbsp&nbsp&nbspInstituto Italo Paraguayo</h1>
+                                <h2>&nbsp&nbsp&nbspGesti&oacuten de Cobro</h2><br>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- End-Header -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- Menu-Superior	-->
+                    <nav class="navbar navbar-default">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                                <span class="sr-only">Cambiar navegacion</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gestion de Alumnos<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#/alumnos/alta">Nuevo</a></li>
+                                            <li><a href="#">Buscar por Nombre</a></li>
+                                            <li><a href="#">Listar por Curso</a></li>
+                                            <li><a href="#">Matricular Alumno</a></li>
+                                            <li><a href="#">Estado de Cuenta</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Pagos<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Listar Cursos</a></li>
+                                            <li><a href="#">Otro Pagos</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Articulos<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Nuevo Articulo</a></li>
+                                            <li><a href="#">Listar Articulos</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Informes<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Ingresos de hoy</a></li>
+                                            <li><a href="#">Estado de cuentas por Curso</a></li>
+                                            <li><a href="#">Consultar factura emitida</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Otras Configuraciones<b class="caret"></b></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Nuevo A&ntildeo lectivo</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    <!-- End-Menu-Superior	-->
+                </div>
+            </div>
+            <div class="row">			
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <!-- Menu-Lateral	-->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Menu Lateral</h3>
+                        </div>
+                        <div class="panel-body">
+
+
+                        </div>
+                    </div>
+
+                    <!-- End-Menu-Lateral	-->
+                </div>
+                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+                    <!-- Contenido	-->
+                    <div ng-view="">
+
+                    </div>
+                    <!-- End-Contenido	-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- Pie	-->
+
+                    <!-- End-Pie	-->
+                </div>
+            </div>
+        </div>
+
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+        <script src="js/vendor/bootstrap.js"></script>
+        <script src="js/main.js"></script>
+
+    </body>
+</html>
