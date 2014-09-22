@@ -18,6 +18,10 @@ Wssc.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'alumnos/mostrar.html',
                     controller: 'alumnosMostrarCtrl'
                 })
+                .when('/alumnos/modificar/:id', {
+                    templateUrl: 'alumnos/modificar.html',
+                    controller: 'alumnosModificarCtrl'
+                })
 
                 .otherwise({RedirectTo: '/'});
     }]);
@@ -34,7 +38,7 @@ Wssc.controller('alumnosAltaCtrl', ['$scope', '$http', function($scope, $http) {
                     alumno = new Object;
                     alumno.nombre = $scope.nombre;
                     alumno.apellido = $scope.apellido;
-                    alumno.optionsRadios = $scope.sexo;
+                    alumno.sexo = $scope.sexo;
                     alumno.nacimiento = $scope.nacimiento;
                     alumno.responsable = $scope.responsable;
                     alumno.cedulaResponsable = $scope.cedula_responsable;
@@ -70,15 +74,79 @@ Wssc.controller('alumnosListarCtrl', ['$scope', function($scope, $http) {
             console.log("exito");
         };
     }]);
-Wssc.controller('alumnosMostrarCtrl', ['$scope', '$http', '$routeParams',function($scope, $http, $routeParams) {
+Wssc.controller('alumnosMostrarCtrl', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams) {
         var id = $routeParams.id.toString();
         url = "webresources/italo.alumnos/" + id;
         $http.get(url).
                 success(function(data, status, headers, config) {
-                       $scope.alumno = data;
+                    $scope.alumno = data;
                 }).
                 error(function(data, status, headers, config) {
-                       console.log(data);
+                    console.log(data);
                 });
+
+    }]);
+Wssc.controller('alumnosModificarCtrl', ['$scope', '$http', '$routeParams','$location', function($scope, $http, $routeParams, $location) {
+        var id = $routeParams.id.toString();
+        url = "webresources/italo.alumnos/" + id;
+        $http.get(url).
+                success(function(data, status, headers, config) {
+                    alumno = data;
+                    console.log(data);
+                    $scope.nombre = alumno.nombre;
+                    $scope.apellido = alumno.apellido;
+                    $scope.cedula = alumno.cedula;
+                    $scope.sexo = alumno.sexo;
+                    $scope.nacimiento = alumno.nacimiento;
+                    $scope.responsable = alumno.responsable;
+                    $scope.cedula_responsable = alumno.cedulaResponsable;
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
+        $scope.modificar = function() {
+            if ($scope.alumno.$valid) {
+                if ($scope.sexo === "") {
+                    $scope.radioRequerido = "";
+                } else {
+                    alumno = new Object;
+                    alumno.id = id;
+                    alumno.nombre = $scope.nombre;
+                    alumno.apellido = $scope.apellido;
+                    alumno.sexo = $scope.sexo;
+                    alumno.nacimiento = $scope.nacimiento;
+                    alumno.responsable = $scope.responsable;
+                    alumno.cedulaResponsable = $scope.cedula_responsable;
+                    if ($scope.cedula !== "") {
+                        alumno.cedula = $scope.cedula;
+                    };
+                    url = "webresources/italo.alumnos/" + id;
+                    console.log(alumno);
+                    console.log(url);
+                    $http.put(url, alumno)
+                            .
+                            success(function(data, status, headers, config) {
+                                alert("Se ha modificado correctamente a " + alumno.nombre + " " + alumno.apellido);
+                                $location.path('alumnos/'+id);
+                            }).
+                            error(function(data, status, headers, config) {
+                                txt = "duplicate key value violates unique constraint";
+                                // called asynchronously if an error occurs
+                                // or server returns response with an error status.
+                                if (data.toString().search(txt) > 0) {
+                                    alert("El numero de cedula " + alumno.cedula + " ya esta registrado");
+                                } else {
+                                    alert("Ha ocurrido un error");
+                                }
+                            });
+                    console.log(alumno);
+                };
+            } else {
+                console.log("no entro");
+            };
+        };
+        $scope.cancelar = function() {
+            $location.path('alumnos/'+id);
+        };
 
     }]);

@@ -1,0 +1,106 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Modificar Alumno</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" name="alumno">
+            <fieldset>
+                <legend>Datos del nuevo alumno:</legend>
+                <div class="form-group">
+                    <label for="inputNombre" class="col-lg-2 control-label">Nombre</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputNombre" placeholder="Nombre" type="text" name="nombre" ng-model="nombre" required ng-pattern="/^[a-zA-z0-9\s]{1,100}$/">
+                        <div ng-hide="!alumno.nombre.$invalid || alumno.nombre.$pristine">
+                            <p class="text-danger">
+                                Campo Obligatorio. Maximo 100 letras
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="inputApellido" class="col-lg-2 control-label">Apellido</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputApellido" placeholder="Apellido" type="text" ng-model="apellido" name="apellido" required ng-pattern="/^[a-zA-z0-9\s]{1,100}$/">
+                        <div ng-hide="!alumno.apellido.$invalid || alumno.apellido.$pristine">
+                            <p class="text-danger">
+                                Campo Obligatorio. Maximo 100 letras
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputCedula" class="col-lg-2 control-label">Numero de Cedula</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputCedula" placeholder="Cedula" type="text" name="cedula" ng-model="cedula" ng-pattern="/^[0-9]{1,10}$/">
+                        <div ng-hide="!alumno.cedula.$invalid || alumno.cedula.$pristine">
+                            <p class="text-danger">
+                                Solo Numeros
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sexoList" class="col-lg-2 control-label">Sexo</label>
+                    <div class="col-lg-10">
+                        <div class="radio">
+                            <label>
+                                <input name="optionsRadios" id="optionsRadios1" value="v" checked="true" type="radio" ng-model="sexo">
+                                Varon
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input name="optionsRadios" id="optionsRadios2" value="m" type="radio" ng-model="sexo">
+                                Mujer
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputNacimiento" class="col-lg-2 control-label">Fecha de Nacimiento</label>
+                    <div class="col-lg-10">
+                        <input name="nacimiento" type='text' class="form-control" id="inputNacimiento" placeholder="MM-MM-AA" ng-model="nacimiento" required ng-pattern="/^[0-9]{1,2}[-]{1}[0-9]{1,2}[-]{1}[0-9]{2,2}$/">
+                        <div ng-hide="!alumno.nacimiento.$invalid || alumno.nacimiento.$pristine">
+                            <p class="text-danger">
+                                Campo Obligatorio. Formato DD-MM-AA
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputResponsable" class="col-lg-2 control-label">Nombre del Responsable</label>
+                    <div class="col-lg-10">
+                        <input name="responsable" class="form-control" id="inputResponsable" placeholder="Responsable" type="text" ng-model="responsable" required ng-pattern="/^[a-zA-z0-9\s]{1,200}$/">
+                        <div ng-hide="!alumno.responsable.$invalid || alumno.responsable.$pristine">
+                            <p class="text-danger">
+                                Campo Obligatorio. Maximo 200 letras
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputResponsable_cedula" class="col-lg-2 control-label">Cedula del Responsable</label>
+                    <div class="col-lg-10">
+                        <input name="Responsable_cedula" class="form-control" id="inputResponsable_cedula" placeholder="Responsable_cedula" type="text" ng-model="cedula_responsable" required ng-pattern="/^[0-9]{1,10}$/">
+                        <div ng-hide="!alumno.Responsable_cedula.$invalid || alumno.Responsable_cedula.$pristine">
+                            <p class="text-danger">
+                                Campo Obligatorio. Solo numeros
+                            </p>
+                        </div>
+                    </div>    
+                </div>
+
+                <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button class="btn btn-default" ng-click="cancelar()">Cancel</button>
+                        <button class="btn btn-primary" ng-click="modificar()">Modificar</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
