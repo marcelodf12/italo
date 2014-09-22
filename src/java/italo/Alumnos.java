@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Alumnos.findByCedulaResponsable", query = "SELECT a FROM Alumnos a WHERE a.cedulaResponsable = :cedulaResponsable"),
     @NamedQuery(name = "Alumnos.findBySexo", query = "SELECT a FROM Alumnos a WHERE a.sexo = :sexo")})
 public class Alumnos implements Serializable {
+    private Integer cedula;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,10 +58,6 @@ public class Alumnos implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "apellido")
     private String apellido;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "cedula")
-    private int cedula;
     @Size(max = 8)
     @Column(name = "nacimiento")
     private String nacimiento;
@@ -111,14 +108,6 @@ public class Alumnos implements Serializable {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-    }
-
-    public int getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(int cedula) {
-        this.cedula = cedula;
     }
 
     public String getNacimiento() {
@@ -185,6 +174,14 @@ public class Alumnos implements Serializable {
     @Override
     public String toString() {
         return "italo.Alumnos[ id=" + id + " ]";
+    }
+
+    public Integer getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(Integer cedula) {
+        this.cedula = cedula;
     }
     
 }
