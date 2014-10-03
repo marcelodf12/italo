@@ -134,6 +134,14 @@ Wssc.controller('alumnosMostrarCtrl', ['$scope', '$http', '$routeParams', functi
                 error(function(data, status, headers, config) {
                     console.log(data);
                 });
+        url2 = "webresources/italo.matriculas/alumnos/"+id;
+        $http.get(url2).
+                success(function(data, status, headers, config) {
+                    $scope.matriculas = data;
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
 
     }]);
 

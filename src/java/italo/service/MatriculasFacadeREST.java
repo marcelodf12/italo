@@ -107,6 +107,16 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     }
 
     @GET
+    @Path("alumnos/{id}")
+    @Produces({"application/xml", "application/json"})
+    public List<Matriculas> buscar(@PathParam("id") Integer id) {
+        List<Matriculas> matriculas = em.createQuery("SELECT a FROM Matriculas a WHERE (a.fkAlumno.id = :id)")
+                .setParameter("id", id)
+                .getResultList();
+        return matriculas;
+    }
+    
+    @GET
     @Override
     @Produces({"application/xml", "application/json"})
     public List<Matriculas> findAll() {
