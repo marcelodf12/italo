@@ -53,10 +53,8 @@
                                     <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Gestion de Alumnos<b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="#/alumnos/alta">Nuevo</a></li>
-                                            <li><a href="#">Buscar por Nombre</a></li>
-                                            <li><a href="#">Listar por Curso</a></li>
-                                            <li><a href="#">Matricular Alumno</a></li>
-                                            <li><a href="#">Estado de Cuenta</a></li>
+                                            <li><a href="#/alumnos/listar">Listar por Curso</a></li>
+                                            <li><a href="#/alumnos/buscar">Matricular Alumno</a></li>
                                         </ul>
                                     </li>
 
@@ -92,28 +90,12 @@
                     <!-- End-Menu-Superior	-->
                 </div>
             </div>
-            <div class="row">			
-                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                    <!-- Menu-Lateral	-->
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Menu Lateral</h3>
-                        </div>
-                        <div class="panel-body">
-
-
-                        </div>
-                    </div>
-
-                    <!-- End-Menu-Lateral	-->
-                </div>
-                <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-                    <!-- Contenido	-->
+            <div class="row">
                     <div ng-view="">
+                    <!-- Contenido	-->
 
-                    </div>
                     <!-- End-Contenido	-->
-                </div>
+                    </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

@@ -3,17 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package italo.service;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import javax.validation.Validator;
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 
 /**
  *
  * @author marcelo
  */
 public abstract class AbstractFacade<T> {
+
     private Class<T> entityClass;
 
     public AbstractFacade(Class<T> entityClass) {
@@ -23,7 +29,18 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
-        getEntityManager().persist(entity);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
+        if (constraintViolations.size() > 0) {
+            Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
+            while (iterator.hasNext()) {
+                ConstraintViolation<T> cv = iterator.next();
+                System.err.println(cv.getRootBeanClass().getName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
+            }
+        } else {
+            getEntityManager().persist(entity);
+        }
     }
 
     public void edit(T entity) {
@@ -60,5 +77,5 @@ public abstract class AbstractFacade<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
 }

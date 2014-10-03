@@ -3,10 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package italo.service;
 
+import italo.Alumnos;
+import italo.Cuotas;
+import italo.Cursos;
 import italo.Matriculas;
+import italo.Promociones;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,6 +31,7 @@ import javax.ws.rs.Produces;
 @Stateless
 @Path("italo.matriculas")
 public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
+
     @PersistenceContext(unitName = "italoPU")
     private EntityManager em;
 
@@ -38,6 +43,46 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     @Override
     @Consumes({"application/xml", "application/json"})
     public void create(Matriculas entity) {
+        List<Cuotas> cuotas = new ArrayList();
+        Cuotas c1 = new Cuotas();
+        c1.setMonto(entity.getMatricula());
+        c1.setFkMatricula(entity);
+        c1.setVencimiento(1);
+        c1.setPagosCollection(null);
+        cuotas.add(c1);
+        int c;
+        Cuotas cuota;
+        for (c = 2; c < 12; c++) {
+            cuota = new Cuotas();
+            if (c == 2) {
+                cuota.setMonto(entity.getCuota() / 2);
+            } else {
+                cuota.setMonto(entity.getCuota());
+            }
+
+            cuota.setVencimiento(c);
+            cuota.setFkMatricula(entity);
+            cuota.setPagosCollection(null);
+            cuotas.add(cuota);
+        }
+        Cuotas c12 = new Cuotas();
+
+        c12.setMonto(entity.getExamen());
+        c12.setVencimiento(
+                12);
+        c12.setFkMatricula(entity);
+
+        c12.setPagosCollection(
+                null);
+        cuotas.add(c12);
+
+        entity.setCuotasCollection(cuotas);
+
+        entity.setFkAlumno(em.find(Alumnos.class, entity.getFkAlumno().getId()));
+        entity.setFkCurso(em.find(Cursos.class, entity.getFkCurso().getId()));
+        entity.setFkPromocion(em.find(Promociones.class, entity.getFkPromocion().getId()));
+        System.out.println(entity);
+
         super.create(entity);
     }
 
@@ -82,9 +127,33 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
         return String.valueOf(super.count());
     }
 
+    @GET
+    @Path("Matriculas/{id_curso}/{id_promocion}")
+    @Produces({"application/xml", "application/json"})
+    public List<Alumnos> findCurso(@PathParam("id_curso") String idCurso, @PathParam("id_promocion") String idPromocion) {
+        System.out.println("·························");
+        System.out.println(idCurso);
+        System.out.println(idPromocion);
+        System.out.println("·························");
+        Cursos curso;
+        curso = em.find(Cursos.class, Integer.parseInt(idCurso));
+        Promociones promo;
+        promo = em.find(Promociones.class, Integer.parseInt(idPromocion));
+        List<Matriculas> matriculas = em.createQuery("SELECT a FROM Matriculas a WHERE (a.fkCurso = :curso and a.fkPromocion = :promocion)")
+                .setParameter("curso", curso)
+                .setParameter("promocion", promo)
+                .getResultList();
+        System.out.println(matriculas);
+        List<Alumnos> alumnos = new ArrayList();
+        for (Matriculas m : matriculas) {
+            alumnos.add(m.getFkAlumno());
+        }
+        return alumnos;
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

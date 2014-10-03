@@ -9,6 +9,7 @@ package italo;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,7 +43,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Matriculas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="seq_matriculas", sequenceName="seq_matriculas", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_matriculas")
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -54,16 +57,16 @@ public class Matriculas implements Serializable {
     private Integer matricula;
     @Column(name = "examen")
     private Integer examen;
-    @OneToMany(mappedBy = "fkMatricula")
+    @OneToMany(mappedBy = "fkMatricula", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Collection<Cuotas> cuotasCollection;
     @JoinColumn(name = "fk_promocion", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Promociones fkPromocion;
     @JoinColumn(name = "fk_curso", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Cursos fkCurso;
     @JoinColumn(name = "fk_alumno", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Alumnos fkAlumno;
 
     public Matriculas() {
@@ -168,7 +171,16 @@ public class Matriculas implements Serializable {
 
     @Override
     public String toString() {
-        return "italo.Matriculas[ id=" + id + " ]";
+        String r = "\n\nitalo.Matriculas[ id=" + id;
+        r+=", cuota= " + cuota;
+        r+=", matricula= " + matricula;
+        r+=", examen= " + examen;
+        r+=", alumno= " + fkAlumno.toString();
+        r+=", curso= " + fkCurso.toString();
+        r+=", promocion= " + fkPromocion.toString();
+        r+=", cant_cuotas= " + cuotasCollection.size();
+        r+= " ]\n\n";
+        return r;
     }
     
 }

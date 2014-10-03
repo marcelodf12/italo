@@ -1,0 +1,90 @@
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Seleccione el grado/curso</h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" name="matricula">
+                <div class="form-group">
+                    <h4>{{nombre}} {{apellido}}</h4><br>    
+                    <label for="anho" class="col-lg-2 control-label">Año</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="anho" ng-model="anho">
+                            <option ng-repeat="a in anhos" value="{{a}}">{{a.anho}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="especialidad" class="col-lg-2 control-label">Especialidad</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="especialidad" ng-model="filtro" ng-change="mostrarNiveles()">
+                            <option>Educación Inicial</option>
+                            <option>Primaria</option>
+                            <option>E.E.B</option>
+                            <option>BTI</option>
+                            <option>BTC</option>
+                            <option>BATAN</option>
+                            <option>Cientifico</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nivel" class="col-lg-2 control-label">Nivel</label>
+                    <div class="col-lg-10">
+                        <select class="form-control" id="nivel" ng-model="curso">
+                            <option ng-repeat="c in cursos" value="{{c}}">{{c.nivel}}º {{c.seccion}}</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="inputCuota" class="col-lg-2 control-label">Monto de la Cuota</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputCuota" placeholder="Cuota" type="text" name="cuota" ng-model="cuota" ng-pattern="/^[0-9]{1,10}$/">
+                        <div ng-hide="!matricula.cuota.$invalid || matricula.cuota.$pristine">
+                            <p class="text-danger">
+                                Solo Numeros
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputinsc" class="col-lg-2 control-label">Monto de la Matricula</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputinsc" placeholder="Matricula" type="text" name="insc" ng-model="insc" ng-pattern="/^[0-9]{1,10}$/">
+                        <div ng-hide="!matricula.insc.$invalid || matricula.insc.$pristine">
+                            <p class="text-danger">
+                                Solo Numeros
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputexamen" class="col-lg-2 control-label">Monto de la examen</label>
+                    <div class="col-lg-10">
+                        <input class="form-control" id="inputexamen" placeholder="examen" type="text" name="examen" ng-model="examen" ng-pattern="/^[0-9]{1,10}$/">
+                        <div ng-hide="!matricula.examen.$invalid || matricula.examen.$pristine">
+                            <p class="text-danger">
+                                Solo Numeros
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <button class="btn btn-primary" ng-click="matricular()">Matricular</button>
+            </form>
+        </div>
+    </div>
+</div>

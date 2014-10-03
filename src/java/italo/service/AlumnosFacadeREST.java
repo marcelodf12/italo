@@ -81,7 +81,19 @@ public class AlumnosFacadeREST extends AbstractFacade<Alumnos> {
     public String countREST() {
         return String.valueOf(super.count());
     }
-
+    @GET
+    @Path("filtro/{nombre}/{apellido}")
+    @Produces({"application/xml", "application/json"})
+    public List<Alumnos> findCurso(@PathParam("nombre") String nombre, @PathParam("apellido") String apellido){
+        System.out.println(nombre);
+        System.out.println(apellido);
+        List<Alumnos> alumnos = em.createQuery("SELECT a FROM Alumnos a WHERE (upper(a.nombre) LIKE upper(:nombre) and upper(a.apellido) LIKE upper(:apellido))")
+                .setParameter("nombre", "%" + nombre + "%")
+                .setParameter("apellido", "%" +apellido + "%")
+                .getResultList();
+        System.out.println(alumnos);
+        return alumnos;
+    }
     @Override
     protected EntityManager getEntityManager() {
         return em;

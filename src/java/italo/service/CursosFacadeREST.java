@@ -81,6 +81,18 @@ public class CursosFacadeREST extends AbstractFacade<Cursos> {
     public String countREST() {
         return String.valueOf(super.count());
     }
+    
+    @GET
+    @Path("filtrar/{filtro}")
+    @Produces({"application/xml", "application/json"})
+    public List<Cursos> findCurso(@PathParam("filtro") String filtro){
+        System.out.println(filtro);
+        List<Cursos> cursos = em.createQuery("SELECT c FROM Cursos c WHERE c.especialidad LIKE :especialidad")
+                .setParameter("especialidad", filtro)
+                .getResultList();
+        System.out.println(cursos);
+        return cursos;
+    }
 
     @Override
     protected EntityManager getEntityManager() {
