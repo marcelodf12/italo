@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Matriculas.findByMatricula", query = "SELECT m FROM Matriculas m WHERE m.matricula = :matricula"),
     @NamedQuery(name = "Matriculas.findByExamen", query = "SELECT m FROM Matriculas m WHERE m.examen = :examen")})
 public class Matriculas implements Serializable {
+    @OneToMany(mappedBy = "fkMatricula")
+    private Collection<Pagos> pagosCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="seq_matriculas", sequenceName="seq_matriculas", allocationSize = 1)
@@ -181,6 +183,15 @@ public class Matriculas implements Serializable {
         r+=", cant_cuotas= " + cuotasCollection.size();
         r+= " ]\n\n";
         return r;
+    }
+
+    @XmlTransient
+    public Collection<Pagos> getPagosCollection() {
+        return pagosCollection;
+    }
+
+    public void setPagosCollection(Collection<Pagos> pagosCollection) {
+        this.pagosCollection = pagosCollection;
     }
     
 }

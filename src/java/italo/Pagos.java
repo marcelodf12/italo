@@ -45,12 +45,12 @@ public class Pagos implements Serializable {
     private String fecha;
     @Column(name = "monto")
     private Integer monto;
+    @JoinColumn(name = "fk_matricula", referencedColumnName = "id")
+    @ManyToOne
+    private Matriculas fkMatricula;
     @JoinColumn(name = "fk_factura", referencedColumnName = "id")
     @ManyToOne
     private Facturas fkFactura;
-    @JoinColumn(name = "fk_cuota", referencedColumnName = "id")
-    @ManyToOne
-    private Cuotas fkCuota;
 
     public Pagos() {
     }
@@ -83,20 +83,20 @@ public class Pagos implements Serializable {
         this.monto = monto;
     }
 
+    public Matriculas getFkMatricula() {
+        return fkMatricula;
+    }
+
+    public void setFkMatricula(Matriculas fkMatricula) {
+        this.fkMatricula = fkMatricula;
+    }
+
     public Facturas getFkFactura() {
         return fkFactura;
     }
 
     public void setFkFactura(Facturas fkFactura) {
         this.fkFactura = fkFactura;
-    }
-
-    public Cuotas getFkCuota() {
-        return fkCuota;
-    }
-
-    public void setFkCuota(Cuotas fkCuota) {
-        this.fkCuota = fkCuota;
     }
 
     @Override

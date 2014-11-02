@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Alumnos.findByCedulaResponsable", query = "SELECT a FROM Alumnos a WHERE a.cedulaResponsable = :cedulaResponsable"),
     @NamedQuery(name = "Alumnos.findBySexo", query = "SELECT a FROM Alumnos a WHERE a.sexo = :sexo")})
 public class Alumnos implements Serializable {
+    @Column(name = "cedula")
     private Integer cedula;
     private static final long serialVersionUID = 1L;
     @Id
@@ -183,5 +184,6 @@ public class Alumnos implements Serializable {
     public void setCedula(Integer cedula) {
         this.cedula = cedula;
     }
+
     
 }
