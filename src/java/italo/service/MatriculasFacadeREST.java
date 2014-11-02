@@ -9,6 +9,7 @@ import italo.Alumnos;
 import italo.Cuotas;
 import italo.Cursos;
 import italo.Matriculas;
+import italo.Pagos;
 import italo.Promociones;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,27 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     public MatriculasFacadeREST() {
         super(Matriculas.class);
     }
+    @GET
+    @Path("/cuotas/{id}")
+    @Consumes({"application/xml", "application/json"})
+    public List<Cuotas> getCuotas(@PathParam("id") Integer id){
+        return (List<Cuotas>)em
+                .createQuery("SELECT c FROM Cuotas c WHERE (c.fkMatricula.id = :id)")
+                .setParameter("id", id)
+                .getResultList();
+    }
+    
+    @GET
+    @Path("/pagos/{id}")
+    @Consumes({"application/xml", "application/json"})
+    public List<Pagos> pagos(@PathParam("id") Integer id){
+        return (List<Pagos>)em
+                .createQuery("SELECT p FROM Pagos p WHERE (p.fkCuota.id = :id)")
+                .setParameter("id", id)
+                .getResultList();
+    }
 
+    
     @POST
     @Override
     @Consumes({"application/xml", "application/json"})
