@@ -8,6 +8,7 @@ package italo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,18 +39,18 @@ public class Pagos implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Size(max = 8)
-    @Column(name = "fecha")
+    @Column(name = "fecha", length = 8)
     private String fecha;
     @Column(name = "monto")
     private Integer monto;
     @JoinColumn(name = "fk_matricula", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Matriculas fkMatricula;
     @JoinColumn(name = "fk_factura", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Facturas fkFactura;
 
     public Pagos() {

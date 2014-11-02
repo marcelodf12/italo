@@ -11,7 +11,6 @@ var iniciarFactura = function() {
     facturaGlobal.nombre = "";
     facturaGlobal.ruc = "";
     facturaGlobal.direccion = "";
-    facturaGlobal.timbrado = "";
     facturaGlobal.total = 0;
     facturaGlobal.iva5 = 0;
     facturaGlobal.iva10 = 0;
@@ -351,7 +350,7 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
             detalle.monto = monto;
             detalle.cantidad = 1;
             detalle.descripcion = "Pago " + mes + " " + titulo;
-            detalle.precioUnitario = monto;
+            detalle.preciounitario = monto;
             detalle.impuesto = 0;
             facturaGlobal.detallefacturaList.push(detalle);
             var fecha = new Date();
@@ -371,7 +370,7 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
 
         $http.get(url).
                 success(function(data, status, headers, config) {
-                    url2 = url = "webresources/italo.matriculas/pagos/" + id;
+                    url2 = "webresources/italo.matriculas/pagos/" + id;
                     $scope.cuotas = data;
                     $scope.alumno = $scope.cuotas[1].fkMatricula.fkAlumno;
                     $scope.titulo = $scope.cuotas[1].fkMatricula.fkAlumno.apellido + " " +
@@ -420,22 +419,87 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
 
     }]);
 Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
-        $scope.nombre = facturaGlobal.nombre;
-        $scope.ruc = facturaGlobal.ruc;
-        $scope.fecha = facturaGlobal.fecha;
-        $scope.detalles = facturaGlobal.detallefacturaList;
-        for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
-            if(facturaGlobal.detallefacturaList[x].impuesto === 0){
-                console.log("impuesto 0");
-               $scope.detalles[x].exenta=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
-            }else if(facturaGlobal.detallefacturaList[x].impuesto === 5){
-                console.log("impuesto 5");
-               $scope.detalles[x].iva5=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
-            }else if(facturaGlobal.detallefacturaList[x].impuesto === 10){
-                console.log("impuesto 10");
-               $scope.detalles[x].iva10=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
+        $scope.borrar = function(index) {
+            $scope.detalles.splice(index, 1);
+            for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
+                $scope.detalles[x].index = x;
             }
-        }
-        console.log(facturaGlobal.detallefacturaList);
-        console.log($scope.detalles);
+        };
+        $scope.agregar = function() {
+            if (!$scope.factura.Nprecio.$invalid && !$scope.factura.Ncantidad.$invalid) {
+                detalle = new Object();
+                detalle.monto = $scope.Nprecio * $scope.Ncantidad;
+                detalle.cantidad = parseInt($scope.Ncantidad);
+                detalle.descripcion = $scope.Ndescripcion;
+                detalle.preciounitario = parseInt($scope.Nprecio);
+                detalle.impuesto = parseInt($scope.Nimpuesto);
+                facturaGlobal.detallefacturaList.push(detalle);
+                $scope.factura.Nprecio.$pristine = true;
+                $scope.factura.Ncantidad.$pristine = true;
+                facturaGlobal.nombre = $scope.nombre;
+                facturaGlobal.ruc = $scope.ruc;
+                facturaGlobal.fecha = $scope.fecha;
+                facturaGlobal.direccion = $scope.direccion;
+                init();
+            }
+        };
+        $scope.guardar = function() {
+            console.log(facturaGlobal);
+            url = "webresources/italo.facturas/";
+            for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
+                delete facturaGlobal.detallefacturaList[x].index;
+                delete facturaGlobal.detallefacturaList[x].iva5;
+                delete facturaGlobal.detallefacturaList[x].iva10;
+                delete facturaGlobal.detallefacturaList[x].exenta;
+            }
+            $http.post(url, facturaGlobal).
+                    success(function(data, status, headers, config) {
+                        console.log(data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        console.log(data);
+                    });
+
+
+
+        };
+        init = function() {
+            $scope.nombre = facturaGlobal.nombre;
+            $scope.ruc = facturaGlobal.ruc;
+            $scope.fecha = facturaGlobal.fecha;
+            $scope.detalles = facturaGlobal.detallefacturaList;
+            facturaGlobal.total = 0;
+            facturaGlobal.iva5 = 0;
+            facturaGlobal.iva10 = 0;
+            facturaGlobal.exenta = 0;
+            for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
+                $scope.detalles[x].index = x;
+                if (facturaGlobal.detallefacturaList[x].impuesto === 0) {
+                    console.log("impuesto 0");
+                    $scope.detalles[x].exenta = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    facturaGlobal.exenta += facturaGlobal.detallefacturaList[x].monto;
+                } else if (facturaGlobal.detallefacturaList[x].impuesto === 5) {
+                    console.log("impuesto 5");
+                    $scope.detalles[x].iva5 = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    facturaGlobal.iva5 += facturaGlobal.detallefacturaList[x].monto / 21;
+                } else if (facturaGlobal.detallefacturaList[x].impuesto === 10) {
+                    console.log("impuesto 10");
+                    $scope.detalles[x].iva10 = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    facturaGlobal.iva10 += facturaGlobal.detallefacturaList[x].monto / 11;
+                } else {
+                    console.log("que paso?");
+                    console.log(facturaGlobal.detallefacturaList[x].impuesto);
+                }
+                facturaGlobal.total += facturaGlobal.detallefacturaList[x].monto;
+                $scope.total = facturaGlobal.total;
+                facturaGlobal.iva5 = parseInt(facturaGlobal.iva5);
+                facturaGlobal.iva10 = parseInt(facturaGlobal.iva10);
+            }
+            ;
+            $scope.Ncantidad = "";
+            $scope.Ndescripcion = "";
+            $scope.Nprecio = "";
+            $scope.Nimpuesto = 10;
+        };
+        init();
     }]);

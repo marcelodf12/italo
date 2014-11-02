@@ -8,6 +8,7 @@ package italo;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,28 +35,28 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Detallefactura.findByMonto", query = "SELECT d FROM Detallefactura d WHERE d.monto = :monto"),
     @NamedQuery(name = "Detallefactura.findByCantidad", query = "SELECT d FROM Detallefactura d WHERE d.cantidad = :cantidad"),
     @NamedQuery(name = "Detallefactura.findByDescripcion", query = "SELECT d FROM Detallefactura d WHERE d.descripcion = :descripcion"),
-    @NamedQuery(name = "Detallefactura.findByPrecioUnitario", query = "SELECT d FROM Detallefactura d WHERE d.precioUnitario = :precioUnitario"),
+    @NamedQuery(name = "Detallefactura.findByPrecioUnitario", query = "SELECT d FROM Detallefactura d WHERE d.preciounitario = :preciounitario"),
     @NamedQuery(name = "Detallefactura.findByImpuesto", query = "SELECT d FROM Detallefactura d WHERE d.impuesto = :impuesto")})
 public class Detallefactura implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "monto")
     private Integer monto;
     @Column(name = "cantidad")
     private Integer cantidad;
     @Size(max = 2147483647)
-    @Column(name = "descripcion")
+    @Column(name = "descripcion", length = 2147483647)
     private String descripcion;
-    @Column(name = "precioUnitario")
-    private Integer precioUnitario;
+    @Column(name = "preciounitario")
+    private Integer preciounitario;
     @Column(name = "impuesto")
     private Integer impuesto;
     @JoinColumn(name = "fk_factura", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Facturas fkFactura;
 
     public Detallefactura() {
@@ -98,11 +99,11 @@ public class Detallefactura implements Serializable {
     }
 
     public Integer getPrecioUnitario() {
-        return precioUnitario;
+        return preciounitario;
     }
 
-    public void setPrecioUnitario(Integer precioUnitario) {
-        this.precioUnitario = precioUnitario;
+    public void setPrecioUnitario(Integer preciounitario) {
+        this.preciounitario = preciounitario;
     }
 
     public Integer getImpuesto() {

@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package italo;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,26 +39,27 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Facturas.findByDireccion", query = "SELECT f FROM Facturas f WHERE f.direccion = :direccion"),
     @NamedQuery(name = "Facturas.findByTotal", query = "SELECT f FROM Facturas f WHERE f.total = :total"),
     @NamedQuery(name = "Facturas.findByIva5", query = "SELECT f FROM Facturas f WHERE f.iva5 = :iva5"),
-    @NamedQuery(name = "Facturas.findByIva10", query = "SELECT f FROM Facturas f WHERE f.iva10 = :iva10")})
+    @NamedQuery(name = "Facturas.findByIva10", query = "SELECT f FROM Facturas f WHERE f.iva10 = :iva10"),
+    @NamedQuery(name = "Facturas.findByExenta", query = "SELECT f FROM Facturas f WHERE f.exenta = :exenta")})
 public class Facturas implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq_facturas")
+    @SequenceGenerator(name="seq_facturas",sequenceName="seq_facturas", allocationSize=1)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Size(max = 8)
-    @Column(name = "fecha")
+    @Column(name = "fecha", length = 8)
     private String fecha;
     @Size(max = 255)
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 255)
     private String nombre;
     @Size(max = 20)
-    @Column(name = "ruc")
+    @Column(name = "ruc", length = 20)
     private String ruc;
     @Size(max = 255)
-    @Column(name = "direccion")
+    @Column(name = "direccion", length = 255)
     private String direccion;
     @Column(name = "total")
     private Integer total;
@@ -192,5 +195,5 @@ public class Facturas implements Serializable {
     public String toString() {
         return "italo.Facturas[ id=" + id + " ]";
     }
-
+    
 }

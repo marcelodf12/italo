@@ -41,18 +41,18 @@ public class Cursos implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "nivel")
     private Integer nivel;
     @Size(max = 20)
-    @Column(name = "especialidad")
+    @Column(name = "especialidad", length = 20)
     private String especialidad;
     @Size(max = 1)
-    @Column(name = "turno")
+    @Column(name = "turno", length = 1)
     private String turno;
     @Size(max = 1)
-    @Column(name = "seccion")
+    @Column(name = "seccion", length = 1)
     private String seccion;
     @OneToMany(mappedBy = "fkCurso")
     private List<Matriculas> matriculasList;

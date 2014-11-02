@@ -20,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,13 +42,12 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Matriculas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @SequenceGenerator(name="seq_matriculas", sequenceName="seq_matriculas", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_matriculas")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Size(max = 8)
-    @Column(name = "fecha")
+    @Column(name = "fecha", length = 8)
     private String fecha;
     @Column(name = "cuota")
     private Integer cuota;
@@ -62,13 +60,13 @@ public class Matriculas implements Serializable {
     @OneToMany(mappedBy = "fkMatricula")
     private List<Pagos> pagosList;
     @JoinColumn(name = "fk_promocion", referencedColumnName = "id")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     private Promociones fkPromocion;
     @JoinColumn(name = "fk_curso", referencedColumnName = "id")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     private Cursos fkCurso;
     @JoinColumn(name = "fk_alumno", referencedColumnName = "id")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     private Alumnos fkAlumno;
 
     public Matriculas() {

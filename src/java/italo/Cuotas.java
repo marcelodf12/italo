@@ -18,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -37,17 +36,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Cuotas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @SequenceGenerator(name="seq_cuotas", sequenceName="seq_cuotas", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cuotas")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Column(name = "monto")
     private Integer monto;
     @Column(name = "vencimiento")
     private Integer vencimiento;
     @JoinColumn(name = "fk_matricula", referencedColumnName = "id")
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
+    @ManyToOne(cascade = CascadeType.ALL)
     private Matriculas fkMatricula;
 
     public Cuotas() {

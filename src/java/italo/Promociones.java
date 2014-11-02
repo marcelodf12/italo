@@ -39,10 +39,10 @@ public class Promociones implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Size(max = 255)
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 255)
     private String nombre;
     @Column(name = "anho")
     private Integer anho;

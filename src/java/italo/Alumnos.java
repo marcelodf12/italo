@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +29,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author marcelo
  */
 @Entity
-@Table(name = "alumnos")
+@Table(name = "alumnos", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"cedula"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Alumnos.findAll", query = "SELECT a FROM Alumnos a"),
@@ -45,30 +47,30 @@ public class Alumnos implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "apellido")
+    @Column(name = "apellido", nullable = false, length = 100)
     private String apellido;
     @Column(name = "cedula")
     private Integer cedula;
     @Size(max = 8)
-    @Column(name = "nacimiento")
+    @Column(name = "nacimiento", length = 8)
     private String nacimiento;
     @Size(max = 200)
-    @Column(name = "responsable")
+    @Column(name = "responsable", length = 200)
     private String responsable;
     @Column(name = "cedula_responsable")
     private Integer cedulaResponsable;
     @Size(max = 1)
-    @Column(name = "sexo")
+    @Column(name = "sexo", length = 1)
     private String sexo;
     @OneToMany(mappedBy = "fkAlumno")
     private List<Matriculas> matriculasList;
@@ -80,11 +82,10 @@ public class Alumnos implements Serializable {
         this.id = id;
     }
 
-    public Alumnos(Integer id, String nombre, String apellido, int cedula) {
+    public Alumnos(Integer id, String nombre, String apellido) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
-        this.cedula = cedula;
     }
 
     public Integer getId() {

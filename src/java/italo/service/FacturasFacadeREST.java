@@ -6,6 +6,7 @@
 
 package italo.service;
 
+import italo.Detallefactura;
 import italo.Facturas;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -35,10 +36,10 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
     }
 
     @POST
-    @Override
     @Consumes({"application/xml", "application/json"})
-    public void create(Facturas entity) {
+    public Facturas crear(Facturas entity) {
         super.create(entity);
+        return entity;
     }
 
     @PUT
@@ -65,7 +66,10 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
     @Override
     @Produces({"application/xml", "application/json"})
     public List<Facturas> findAll() {
-        return super.findAll();
+        return (List<Facturas>)em
+                .createQuery("SELECT d FROM Facturas d")
+                .getResultList();
+        //return super.findAll();
     }
 
     @GET

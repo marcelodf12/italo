@@ -11,7 +11,7 @@
             <h4>Responsable</h4>
             {{alumno.responsable}}
             <h4>C.I. Responsable</h4>
-            {{alumno.cedulaResponsable}}
+            {{alumno.cedulaResponsable.toLocaleString()}}
         </div>
     </div>
 </div>
@@ -34,8 +34,8 @@
                 <tbody>
                     <tr ng-repeat="c in cuotas" class="{{c.estado}}">
                         <td>{{c.mes}}</td>
-                        <td>{{c.monto}}</td>
-                        <td>{{c.saldo}}</td>
+                        <td>{{c.monto.toLocaleString()}}</td>
+                        <td>{{c.saldo.toLocaleString()}}</td>
                         <td><button ng-click="pagar(c.saldo, c.mes, titulo)" class="btn btn-info {{c.visible}}">Pagar</button></td>
                     </tr>
                 </tbody>
