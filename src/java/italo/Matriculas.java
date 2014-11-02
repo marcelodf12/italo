@@ -7,7 +7,7 @@
 package italo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,8 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Matriculas.findByMatricula", query = "SELECT m FROM Matriculas m WHERE m.matricula = :matricula"),
     @NamedQuery(name = "Matriculas.findByExamen", query = "SELECT m FROM Matriculas m WHERE m.examen = :examen")})
 public class Matriculas implements Serializable {
-    @OneToMany(mappedBy = "fkMatricula")
-    private Collection<Pagos> pagosCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="seq_matriculas", sequenceName="seq_matriculas", allocationSize = 1)
@@ -59,8 +57,10 @@ public class Matriculas implements Serializable {
     private Integer matricula;
     @Column(name = "examen")
     private Integer examen;
-    @OneToMany(mappedBy = "fkMatricula", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
-    private Collection<Cuotas> cuotasCollection;
+    @OneToMany(mappedBy = "fkMatricula")
+    private List<Cuotas> cuotasList;
+    @OneToMany(mappedBy = "fkMatricula")
+    private List<Pagos> pagosList;
     @JoinColumn(name = "fk_promocion", referencedColumnName = "id")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Promociones fkPromocion;
@@ -119,12 +119,21 @@ public class Matriculas implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Cuotas> getCuotasCollection() {
-        return cuotasCollection;
+    public List<Cuotas> getCuotasList() {
+        return cuotasList;
     }
 
-    public void setCuotasCollection(Collection<Cuotas> cuotasCollection) {
-        this.cuotasCollection = cuotasCollection;
+    public void setCuotasList(List<Cuotas> cuotasList) {
+        this.cuotasList = cuotasList;
+    }
+
+    @XmlTransient
+    public List<Pagos> getPagosList() {
+        return pagosList;
+    }
+
+    public void setPagosList(List<Pagos> pagosList) {
+        this.pagosList = pagosList;
     }
 
     public Promociones getFkPromocion() {
@@ -180,18 +189,9 @@ public class Matriculas implements Serializable {
         r+=", alumno= " + fkAlumno.toString();
         r+=", curso= " + fkCurso.toString();
         r+=", promocion= " + fkPromocion.toString();
-        r+=", cant_cuotas= " + cuotasCollection.size();
+        r+=", cant_cuotas= " + cuotasList.size();
         r+= " ]\n\n";
         return r;
-    }
-
-    @XmlTransient
-    public Collection<Pagos> getPagosCollection() {
-        return pagosCollection;
-    }
-
-    public void setPagosCollection(Collection<Pagos> pagosCollection) {
-        this.pagosCollection = pagosCollection;
     }
     
 }

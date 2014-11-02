@@ -7,7 +7,7 @@
 package italo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,7 +55,7 @@ public class Cursos implements Serializable {
     @Column(name = "seccion")
     private String seccion;
     @OneToMany(mappedBy = "fkCurso")
-    private Collection<Matriculas> matriculasCollection;
+    private List<Matriculas> matriculasList;
 
     public Cursos() {
     }
@@ -105,12 +105,12 @@ public class Cursos implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Matriculas> getMatriculasCollection() {
-        return matriculasCollection;
+    public List<Matriculas> getMatriculasList() {
+        return matriculasList;
     }
 
-    public void setMatriculasCollection(Collection<Matriculas> matriculasCollection) {
-        this.matriculasCollection = matriculasCollection;
+    public void setMatriculasList(List<Matriculas> matriculasList) {
+        this.matriculasList = matriculasList;
     }
 
     @Override

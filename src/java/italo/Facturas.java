@@ -7,7 +7,7 @@
 package italo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Facturas.findByRuc", query = "SELECT f FROM Facturas f WHERE f.ruc = :ruc"),
     @NamedQuery(name = "Facturas.findByDireccion", query = "SELECT f FROM Facturas f WHERE f.direccion = :direccion"),
     @NamedQuery(name = "Facturas.findByTimbrado", query = "SELECT f FROM Facturas f WHERE f.timbrado = :timbrado"),
-    @NamedQuery(name = "Facturas.findByTotal", query = "SELECT f FROM Facturas f WHERE f.total = :total")})
+    @NamedQuery(name = "Facturas.findByTotal", query = "SELECT f FROM Facturas f WHERE f.total = :total"),
+    @NamedQuery(name = "Facturas.findByIva5", query = "SELECT f FROM Facturas f WHERE f.iva5 = :iva5"),
+    @NamedQuery(name = "Facturas.findByIva10", query = "SELECT f FROM Facturas f WHERE f.iva10 = :iva10")})
 public class Facturas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,10 +64,14 @@ public class Facturas implements Serializable {
     private String timbrado;
     @Column(name = "total")
     private Integer total;
+    @Column(name = "iva5")
+    private Integer iva5;
+    @Column(name = "iva10")
+    private Integer iva10;
     @OneToMany(mappedBy = "fkFactura")
-    private Collection<Detallefactura> detallefacturaCollection;
+    private List<Detallefactura> detallefacturaList;
     @OneToMany(mappedBy = "fkFactura")
-    private Collection<Pagos> pagosCollection;
+    private List<Pagos> pagosList;
 
     public Facturas() {
     }
@@ -130,22 +136,38 @@ public class Facturas implements Serializable {
         this.total = total;
     }
 
+    public Integer getIva5() {
+        return iva5;
+    }
+
+    public void setIva5(Integer iva5) {
+        this.iva5 = iva5;
+    }
+
+    public Integer getIva10() {
+        return iva10;
+    }
+
+    public void setIva10(Integer iva10) {
+        this.iva10 = iva10;
+    }
+
     @XmlTransient
-    public Collection<Detallefactura> getDetallefacturaCollection() {
-        return detallefacturaCollection;
+    public List<Detallefactura> getDetallefacturaList() {
+        return detallefacturaList;
     }
 
-    public void setDetallefacturaCollection(Collection<Detallefactura> detallefacturaCollection) {
-        this.detallefacturaCollection = detallefacturaCollection;
+    public void setDetallefacturaList(List<Detallefactura> detallefacturaList) {
+        this.detallefacturaList = detallefacturaList;
     }
 
     @XmlTransient
-    public Collection<Pagos> getPagosCollection() {
-        return pagosCollection;
+    public List<Pagos> getPagosList() {
+        return pagosList;
     }
 
-    public void setPagosCollection(Collection<Pagos> pagosCollection) {
-        this.pagosCollection = pagosCollection;
+    public void setPagosList(List<Pagos> pagosList) {
+        this.pagosList = pagosList;
     }
 
     @Override

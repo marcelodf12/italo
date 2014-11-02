@@ -7,7 +7,7 @@
 package italo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,8 +41,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Alumnos.findByCedulaResponsable", query = "SELECT a FROM Alumnos a WHERE a.cedulaResponsable = :cedulaResponsable"),
     @NamedQuery(name = "Alumnos.findBySexo", query = "SELECT a FROM Alumnos a WHERE a.sexo = :sexo")})
 public class Alumnos implements Serializable {
-    @Column(name = "cedula")
-    private Integer cedula;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +57,8 @@ public class Alumnos implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "apellido")
     private String apellido;
+    @Column(name = "cedula")
+    private Integer cedula;
     @Size(max = 8)
     @Column(name = "nacimiento")
     private String nacimiento;
@@ -71,7 +71,7 @@ public class Alumnos implements Serializable {
     @Column(name = "sexo")
     private String sexo;
     @OneToMany(mappedBy = "fkAlumno")
-    private Collection<Matriculas> matriculasCollection;
+    private List<Matriculas> matriculasList;
 
     public Alumnos() {
     }
@@ -111,6 +111,14 @@ public class Alumnos implements Serializable {
         this.apellido = apellido;
     }
 
+    public Integer getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(Integer cedula) {
+        this.cedula = cedula;
+    }
+
     public String getNacimiento() {
         return nacimiento;
     }
@@ -144,12 +152,12 @@ public class Alumnos implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Matriculas> getMatriculasCollection() {
-        return matriculasCollection;
+    public List<Matriculas> getMatriculasList() {
+        return matriculasList;
     }
 
-    public void setMatriculasCollection(Collection<Matriculas> matriculasCollection) {
-        this.matriculasCollection = matriculasCollection;
+    public void setMatriculasList(List<Matriculas> matriculasList) {
+        this.matriculasList = matriculasList;
     }
 
     @Override
@@ -176,14 +184,5 @@ public class Alumnos implements Serializable {
     public String toString() {
         return "italo.Alumnos[ id=" + id + " ]";
     }
-
-    public Integer getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(Integer cedula) {
-        this.cedula = cedula;
-    }
-
     
 }

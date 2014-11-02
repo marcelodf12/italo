@@ -31,7 +31,6 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(italo.service.AlumnosFacadeREST.class);
-        resources.add(italo.service.ArticulosFacadeREST.class);
         resources.add(italo.service.CuotasFacadeREST.class);
         resources.add(italo.service.CursosFacadeREST.class);
         resources.add(italo.service.DetallefacturaFacadeREST.class);

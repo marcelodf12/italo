@@ -69,7 +69,6 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
         c1.setMonto(entity.getMatricula());
         c1.setFkMatricula(entity);
         c1.setVencimiento(1);
-        c1.setPagosCollection(null);
         cuotas.add(c1);
         int c;
         Cuotas cuota;
@@ -83,7 +82,6 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
 
             cuota.setVencimiento(c);
             cuota.setFkMatricula(entity);
-            cuota.setPagosCollection(null);
             cuotas.add(cuota);
         }
         Cuotas c12 = new Cuotas();
@@ -93,11 +91,9 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
                 12);
         c12.setFkMatricula(entity);
 
-        c12.setPagosCollection(
-                null);
         cuotas.add(c12);
 
-        entity.setCuotasCollection(cuotas);
+        entity.setCuotasList(cuotas);
 
         entity.setFkAlumno(em.find(Alumnos.class, entity.getFkAlumno().getId()));
         entity.setFkCurso(em.find(Cursos.class, entity.getFkCurso().getId()));

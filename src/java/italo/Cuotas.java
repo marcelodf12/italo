@@ -7,9 +7,7 @@
 package italo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,12 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Null;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -53,9 +47,6 @@ public class Cuotas implements Serializable {
     @JoinColumn(name = "fk_matricula", referencedColumnName = "id")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
     private Matriculas fkMatricula;
-    @Null
-    @OneToMany(mappedBy = "fkCuota", cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REFRESH})
-    private Collection<Pagos> pagosCollection;
 
     public Cuotas() {
     }
@@ -94,15 +85,6 @@ public class Cuotas implements Serializable {
 
     public void setFkMatricula(Matriculas fkMatricula) {
         this.fkMatricula = fkMatricula;
-    }
-
-    @XmlTransient
-    public Collection<Pagos> getPagosCollection() {
-        return pagosCollection;
-    }
-
-    public void setPagosCollection(Collection<Pagos> pagosCollection) {
-        this.pagosCollection = pagosCollection;
     }
 
     @Override
