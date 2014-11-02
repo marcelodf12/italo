@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package italo;
 
 import java.io.Serializable;
@@ -36,11 +35,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Facturas.findByNombre", query = "SELECT f FROM Facturas f WHERE f.nombre = :nombre"),
     @NamedQuery(name = "Facturas.findByRuc", query = "SELECT f FROM Facturas f WHERE f.ruc = :ruc"),
     @NamedQuery(name = "Facturas.findByDireccion", query = "SELECT f FROM Facturas f WHERE f.direccion = :direccion"),
-    @NamedQuery(name = "Facturas.findByTimbrado", query = "SELECT f FROM Facturas f WHERE f.timbrado = :timbrado"),
     @NamedQuery(name = "Facturas.findByTotal", query = "SELECT f FROM Facturas f WHERE f.total = :total"),
     @NamedQuery(name = "Facturas.findByIva5", query = "SELECT f FROM Facturas f WHERE f.iva5 = :iva5"),
     @NamedQuery(name = "Facturas.findByIva10", query = "SELECT f FROM Facturas f WHERE f.iva10 = :iva10")})
 public class Facturas implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,15 +58,14 @@ public class Facturas implements Serializable {
     @Size(max = 255)
     @Column(name = "direccion")
     private String direccion;
-    @Size(max = 10)
-    @Column(name = "timbrado")
-    private String timbrado;
     @Column(name = "total")
     private Integer total;
     @Column(name = "iva5")
     private Integer iva5;
     @Column(name = "iva10")
     private Integer iva10;
+    @Column(name = "exenta")
+    private Integer exenta;
     @OneToMany(mappedBy = "fkFactura")
     private List<Detallefactura> detallefacturaList;
     @OneToMany(mappedBy = "fkFactura")
@@ -120,14 +118,6 @@ public class Facturas implements Serializable {
         this.direccion = direccion;
     }
 
-    public String getTimbrado() {
-        return timbrado;
-    }
-
-    public void setTimbrado(String timbrado) {
-        this.timbrado = timbrado;
-    }
-
     public Integer getTotal() {
         return total;
     }
@@ -150,6 +140,14 @@ public class Facturas implements Serializable {
 
     public void setIva10(Integer iva10) {
         this.iva10 = iva10;
+    }
+
+    public Integer getExenta() {
+        return exenta;
+    }
+
+    public void setExenta(Integer exenta) {
+        this.exenta = exenta;
     }
 
     @XmlTransient
@@ -194,5 +192,5 @@ public class Facturas implements Serializable {
     public String toString() {
         return "italo.Facturas[ id=" + id + " ]";
     }
-    
+
 }

@@ -3,6 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+var facturaGlobal = new Object();
+var pagosGlobal = new Object()
+
+var iniciarFactura = function() {
+    facturaGlobal.fecha = "";
+    facturaGlobal.nombre = "";
+    facturaGlobal.ruc = "";
+    facturaGlobal.direccion = "";
+    facturaGlobal.timbrado = "";
+    facturaGlobal.total = 0;
+    facturaGlobal.iva5 = 0;
+    facturaGlobal.iva10 = 0;
+    facturaGlobal.exenta = 0;
+    facturaGlobal.detallefacturaList = [];
+    facturaGlobal.pagosList = [];
+};
+iniciarFactura();
 var Wssc = angular.module("italo", ['ngRoute']);
 Wssc.config(['$routeProvider', function($routeProvider) {
         $routeProvider
@@ -30,7 +47,15 @@ Wssc.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'alumnos/matricular.html',
                     controller: 'alumnosMatricularCtrl'
                 })
-                
+                .when('/alumnos/cuotas/:id', {
+                    templateUrl: 'alumnos/cuotas.html',
+                    controller: 'alumnosCuotasCtrl'
+                })
+                .when('/facturas/actual', {
+                    templateUrl: 'facturas/factura.html',
+                    controller: 'facturasActualCtrl'
+                })
+
                 .otherwise({RedirectTo: '/'});
     }]);
 
@@ -85,16 +110,17 @@ Wssc.controller('alumnosListarCtrl', ['$scope', '$http', function($scope, $http)
         var fecha = new Date();
         var ano = parseInt(fecha.getFullYear());
         $scope.anhos = [];
-        for(c=2014; c<=ano; c++){
+        for (c = 2014; c <= ano; c++) {
             $scope.anhos.push(c);
-        };
+        }
+        ;
         $http.get("webresources/italo.promociones").success(function(data, status, headers, config) {
-                        $scope.anhos = data;
-                        console.log(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        console.log(data);
-                    });
+            $scope.anhos = data;
+            console.log(data);
+        }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
         url = "webresources/italo.alumnos/";
         $scope.mostrarNiveles = function() {
             url2 = "webresources/italo.cursos/filtrar/" + $scope.filtro;
@@ -113,9 +139,9 @@ Wssc.controller('alumnosListarCtrl', ['$scope', '$http', function($scope, $http)
             url3 = "webresources/italo.matriculas/Matriculas/" + idCurso + "/" + idPromocion;
             console.log(url3)
             $http.get(url3).success(function(data, status, headers, config) {
-                        $scope.alumnos = data;
-                        console.log(data);
-                    }).
+                $scope.alumnos = data;
+                console.log(data);
+            }).
                     error(function(data, status, headers, config) {
                         console.log(data);
                     });
@@ -134,7 +160,7 @@ Wssc.controller('alumnosMostrarCtrl', ['$scope', '$http', '$routeParams', functi
                 error(function(data, status, headers, config) {
                     console.log(data);
                 });
-        url2 = "webresources/italo.matriculas/alumnos/"+id;
+        url2 = "webresources/italo.matriculas/alumnos/" + id;
         $http.get(url2).
                 success(function(data, status, headers, config) {
                     $scope.matriculas = data;
@@ -216,13 +242,13 @@ Wssc.controller('alumnosModificarCtrl', ['$scope', '$http', '$routeParams', '$lo
 
 // Filtrar alumnos por nombre y Apellido
 Wssc.controller('alumnosBuscarCtrl', ['$scope', '$http', function($scope, $http) {
-       $scope.buscar = function() {
+        $scope.buscar = function() {
             url3 = "webresources/italo.alumnos/filtro/" + $scope.FiltroN + "/" + $scope.FiltroA;
             console.log(url3);
             $http.get(url3).success(function(data, status, headers, config) {
-                        $scope.alumnos = data;
-                        console.log(data);
-                    }).
+                $scope.alumnos = data;
+                console.log(data);
+            }).
                     error(function(data, status, headers, config) {
                         console.log(data);
                     });
@@ -253,16 +279,17 @@ Wssc.controller('alumnosMatricularCtrl', ['$scope', '$http', '$routeParams', '$l
         var fecha = new Date();
         var ano = parseInt(fecha.getFullYear());
         $scope.anhos = [];
-        for(c=2014; c<=ano; c++){
+        for (c = 2014; c <= ano; c++) {
             $scope.anhos.push(c);
-        };
+        }
+        ;
         $http.get("webresources/italo.promociones").success(function(data, status, headers, config) {
-                        $scope.anhos = data;
-                        console.log(data);
-                    }).
-                    error(function(data, status, headers, config) {
-                        console.log(data);
-                    });
+            $scope.anhos = data;
+            console.log(data);
+        }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
         url = "webresources/italo.alumnos/";
         $scope.mostrarNiveles = function() {
             url2 = "webresources/italo.cursos/filtrar/" + $scope.filtro;
@@ -277,23 +304,138 @@ Wssc.controller('alumnosMatricularCtrl', ['$scope', '$http', '$routeParams', '$l
         };
         $scope.matricular = function() {
             var fecha = new Date();
-            f = fecha.toISOString().substr(2,8);
-            f= f.substr(6,2) + "/" + f.substr(3,2) + "/" + f.substr(0,2);
+            f = fecha.toISOString().substr(2, 8);
+            f = f.substr(6, 2) + "/" + f.substr(3, 2) + "/" + f.substr(0, 2);
             console.log(f);
             matricula = new Object();
             matricula.fecha = f;
             matricula.cuota = $scope.cuota;
             matricula.examen = $scope.examen;
             matricula.matricula = $scope.insc;
-            matricula.fkCurso = JSON.parse($scope.curso); 
+            matricula.fkCurso = JSON.parse($scope.curso);
             matricula.fkPromocion = JSON.parse($scope.anho);
             matricula.fkAlumno = alumno;
             console.log(matricula);
             $http.post("webresources/italo.matriculas/", matricula).success(function(data, status, headers, config) {
-                        console.log(data);
-                    }).
+                console.log(data);
+            }).
                     error(function(data, status, headers, config) {
                         console.log(data);
                     });
         };
+    }]);
+
+//Controlador para el pago de cuotas
+Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+        var id = $routeParams.id.toString();
+        url = "webresources/italo.matriculas/cuotas/" + id;
+        meses = new Array();
+        meses[1] = "Matricula";
+        meses[2] = "Febrero";
+        meses[3] = "Marzo";
+        meses[4] = "Abril";
+        meses[5] = "Mayo";
+        meses[6] = "Junio";
+        meses[7] = "Julio";
+        meses[8] = "Agosto";
+        meses[9] = "Setiembre";
+        meses[10] = "Octubre";
+        meses[11] = "Noviembre";
+        meses[12] = "Derecho";
+        $scope.mes = "";
+
+        $scope.pagar = function(monto, mes, titulo) {
+            console.log("pagos");
+            console.log(monto);
+            detalle = new Object();
+            detalle.monto = monto;
+            detalle.cantidad = 1;
+            detalle.descripcion = "Pago " + mes + " " + titulo;
+            detalle.precioUnitario = monto;
+            detalle.impuesto = 0;
+            facturaGlobal.detallefacturaList.push(detalle);
+            var fecha = new Date();
+            f = fecha.toISOString().substr(2, 8);
+            f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
+            pago = new Object();
+            pago.fecha = f;
+            pago.monto = monto;
+            pago.fkMatricula = $scope.cuotas[1].fkMatricula;
+            facturaGlobal.pagosList.push(pago);
+            alert("Se ha agregado " + detalle.descripcion + "a la factura por el monto de " + detalle.monto);
+            facturaGlobal.fecha = f;
+            facturaGlobal.ruc = $scope.cuotas[1].fkMatricula.fkAlumno.cedulaResponsable;
+            facturaGlobal.nombre = $scope.cuotas[1].fkMatricula.fkAlumno.responsable;
+            console.log(facturaGlobal);
+        };
+
+        $http.get(url).
+                success(function(data, status, headers, config) {
+                    url2 = url = "webresources/italo.matriculas/pagos/" + id;
+                    $scope.cuotas = data;
+                    $scope.alumno = $scope.cuotas[1].fkMatricula.fkAlumno;
+                    $scope.titulo = $scope.cuotas[1].fkMatricula.fkAlumno.apellido + " " +
+                            $scope.cuotas[1].fkMatricula.fkAlumno.nombre + " " +
+                            $scope.cuotas[1].fkMatricula.fkCurso.nivel + "º " +
+                            $scope.cuotas[1].fkMatricula.fkCurso.especialidad + " " +
+                            $scope.cuotas[1].fkMatricula.fkPromocion.anho;
+                    $http.get(url2).
+                            success(function(data, status, headers, config) {
+                                $scope.pagos = data;
+                                suma = 0;
+                                for (x = 0; x < $scope.pagos.length; x++) {
+                                    suma += $scope.pagos[x].monto;
+                                }
+                                console.log(suma);
+                                for (x = 0; x < $scope.cuotas.length; x++) {
+                                    $scope.cuotas[x].visible = "";
+                                    $scope.cuotas[x].mes = meses[$scope.cuotas[x].vencimiento];
+                                    if (suma >= $scope.cuotas[x].monto) {
+                                        $scope.cuotas[x].saldo = 0;
+                                        suma = suma - $scope.cuotas[x].monto;
+                                        $scope.cuotas[x].estado = "success";
+                                        $scope.cuotas[x].visible = "disabled";
+                                    } else if (suma === 0) {
+                                        $scope.cuotas[x].saldo = $scope.cuotas[x].monto;
+                                        $scope.cuotas[x].estado = "danger";
+                                        if ($scope.mes === "") {
+                                            $scope.mes = $scope.cuotas[x].mes;
+                                        }
+                                    } else {
+                                        $scope.cuotas[x].saldo = $scope.cuotas[x].monto - suma;
+                                        suma = 0;
+                                        $scope.cuotas[x].estado = "warning";
+                                        $scope.mes = $scope.cuotas[x].mes;
+                                    }
+                                }
+                                console.log(data);
+                            }).
+                            error(function(data, status, headers, config) {
+                                console.log(data);
+                            });
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
+
+    }]);
+Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+        $scope.nombre = facturaGlobal.nombre;
+        $scope.ruc = facturaGlobal.ruc;
+        $scope.fecha = facturaGlobal.fecha;
+        $scope.detalles = facturaGlobal.detallefacturaList;
+        for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
+            if(facturaGlobal.detallefacturaList[x].impuesto === 0){
+                console.log("impuesto 0");
+               $scope.detalles[x].exenta=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
+            }else if(facturaGlobal.detallefacturaList[x].impuesto === 5){
+                console.log("impuesto 5");
+               $scope.detalles[x].iva5=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
+            }else if(facturaGlobal.detallefacturaList[x].impuesto === 10){
+                console.log("impuesto 10");
+               $scope.detalles[x].iva10=facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
+            }
+        }
+        console.log(facturaGlobal.detallefacturaList);
+        console.log($scope.detalles);
     }]);

@@ -41,15 +41,6 @@ public class PagosFacadeREST extends AbstractFacade<Pagos> {
         super.create(entity);
     }
     
-    @GET
-    @Path("/cuota/{id}")
-    @Consumes({"application/xml", "application/json"})
-    public List<Pagos> getPagos(@PathParam("id") Integer id){
-        return (List<Pagos>)em
-                .createQuery("SELECT p FROM Pagos p WHERE (p.fkCuota.id = :id)")
-                .setParameter("id", id)
-                .getResultList();
-    }
     
     @PUT
     @Path("{id}")

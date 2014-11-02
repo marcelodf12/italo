@@ -44,7 +44,7 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     @Consumes({"application/xml", "application/json"})
     public List<Cuotas> getCuotas(@PathParam("id") Integer id){
         return (List<Cuotas>)em
-                .createQuery("SELECT c FROM Cuotas c WHERE (c.fkMatricula.id = :id)")
+                .createQuery("SELECT c FROM Cuotas c WHERE (c.fkMatricula.id = :id) ORDER BY c.vencimiento")
                 .setParameter("id", id)
                 .getResultList();
     }
@@ -54,7 +54,7 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     @Consumes({"application/xml", "application/json"})
     public List<Pagos> pagos(@PathParam("id") Integer id){
         return (List<Pagos>)em
-                .createQuery("SELECT p FROM Pagos p WHERE (p.fkCuota.id = :id)")
+                .createQuery("SELECT p FROM Pagos p WHERE (p.fkMatricula.id = :id)")
                 .setParameter("id", id)
                 .getResultList();
     }
