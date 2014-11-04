@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -113,11 +114,12 @@ public class Detallefactura implements Serializable {
     public void setImpuesto(Integer impuesto) {
         this.impuesto = impuesto;
     }
-
+    
+    @XmlTransient
     public Facturas getFkFactura() {
         return fkFactura;
     }
-
+    
     public void setFkFactura(Facturas fkFactura) {
         this.fkFactura = fkFactura;
     }

@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package italo.service;
 
+import com.google.gson.Gson;
 import italo.Detallefactura;
 import italo.Facturas;
+import italo.Matriculas;
+import italo.Pagos;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,6 +30,7 @@ import javax.ws.rs.Produces;
 @Stateless
 @Path("italo.facturas")
 public class FacturasFacadeREST extends AbstractFacade<Facturas> {
+
     @PersistenceContext(unitName = "italoPU")
     private EntityManager em;
 
@@ -37,9 +40,26 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
 
     @POST
     @Consumes({"application/xml", "application/json"})
-    public Facturas crear(Facturas entity) {
+    @Override
+    public void create(Facturas entity) {
+        for (Detallefactura d : entity.getDetallefacturaList()) {
+            System.out.println(d.getDescripcion());
+        }
+        Matriculas m = null;
+        for (Pagos p : entity.getPagosList()) {
+            System.out.println(p.getMonto());
+            m = em.find(Matriculas.class, p.getFkMatricula().getId());
+            p.setFkMatricula(null);
+        }
         super.create(entity);
-        return entity;
+        for (Detallefactura d : entity.getDetallefacturaList()) {
+            d.setFkFactura(entity);
+        }
+        for (Pagos p : entity.getPagosList()) {
+            p.setFkFactura(entity);
+            p.setFkMatricula(m);
+        }
+        super.edit(entity);
     }
 
     @PUT
@@ -59,14 +79,18 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
     @Path("{id}")
     @Produces({"application/xml", "application/json"})
     public Facturas find(@PathParam("id") Integer id) {
-        return super.find(id);
+        Facturas f = super.find(id);
+        for (Detallefactura d : f.getDetallefacturaList()) {
+            System.out.println(d);
+        }
+        return f;
     }
 
     @GET
     @Override
     @Produces({"application/xml", "application/json"})
     public List<Facturas> findAll() {
-        return (List<Facturas>)em
+        return (List<Facturas>) em
                 .createQuery("SELECT d FROM Facturas d")
                 .getResultList();
         //return super.findAll();
@@ -90,5 +114,5 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
 }

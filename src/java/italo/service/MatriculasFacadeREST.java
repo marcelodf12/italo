@@ -16,6 +16,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -53,10 +54,16 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
     @Path("/pagos/{id}")
     @Consumes({"application/xml", "application/json"})
     public List<Pagos> pagos(@PathParam("id") Integer id){
-        return (List<Pagos>)em
-                .createQuery("SELECT p FROM Pagos p WHERE (p.fkMatricula.id = :id)")
-                .setParameter("id", id)
-                .getResultList();
+        System.out.println(id);
+        Query q= em.createQuery("SELECT p FROM Pagos p WHERE (p.fkMatricula.id = :id)");
+        System.out.println("creado la consulta");
+        q.setParameter("id", id);
+        System.out.println("parametro");
+        List<Pagos> pagos = q.getResultList();
+        System.out.println("leer la lista");
+        for(Pagos p:pagos)
+            p.setFkFactura(null);
+        return pagos;
     }
 
     

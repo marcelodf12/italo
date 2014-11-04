@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 var facturaGlobal = new Object();
-var pagosGlobal = new Object()
+var pagosGlobal = new Object();
 
 var iniciarFactura = function() {
     facturaGlobal.fecha = "";
@@ -15,8 +15,8 @@ var iniciarFactura = function() {
     facturaGlobal.iva5 = 0;
     facturaGlobal.iva10 = 0;
     facturaGlobal.exenta = 0;
-    facturaGlobal.detallefacturaList = [];
-    facturaGlobal.pagosList = [];
+    facturaGlobal.detallefacturaList = new Array();
+    facturaGlobal.pagosList = new Array();
 };
 iniciarFactura();
 var Wssc = angular.module("italo", ['ngRoute']);
