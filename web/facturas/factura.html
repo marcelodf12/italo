@@ -7,7 +7,7 @@
             <div class="panel-body">
 
                 <div class="form-group">
-                    <label for="inputFecha" class="col-lg-2 control-label">Fecha de Fecha</label>
+                    <label for="inputFecha" class="col-lg-2 control-label">Fecha</label>
                     <div class="col-lg-10">
                         <input name="fecha" type='text' class="form-control" id="inputFecha" placeholder="MM-MM-AA" ng-model="fecha" required ng-pattern="/^[0-9]{1,2}[-]{1}[0-9]{1,2}[-]{1}[0-9]{2,2}$/">
                         <div ng-hide="!factura.fecha.$invalid || factura.fecha.$pristine">
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="inputRuc" class="col-lg-2 control-label">Ruc</label>
                     <div class="col-lg-10">
-                        <input class="form-control" id="inputRuc" placeholder="Cedula" type="text" name="cedula" ng-model="ruc" ng-pattern="/^[a-zA-z0-9\s]{1,100}$/">
+                        <input class="form-control" id="inputRuc" placeholder="Cedula" type="text" name="cedula" ng-model="ruc">
                         <div ng-hide="!factura.ruc.$invalid || factura.ruc.$pristine">
                             <p class="text-danger">
                                 Maximo 100 letras
@@ -90,10 +90,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    {{!factura.Nprecio.$invalid}}
-                    {{factura.Nprecio.$pristine}}
-                    {{!factura.Ncantidad.$invalid}}
-                    {{factura.Ncantidad.$pristine}}
                     <div ng-hide="(!factura.Nprecio.$invalid && !factura.Ncantidad.$invalid) || (factura.Nprecio.$pristine || factura.Ncantidad.$pristine)">
                         <p class="text-danger">
                             Cantidad y Precio unitario deben ser solo numeros. Campos Obligatorios

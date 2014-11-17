@@ -27,7 +27,7 @@
                     <tr ng-repeat="d in factura.detallefacturaList">
                         <td>{{d.cantidad.toLocaleString()}}</td>
                         <td>{{d.descripcion}}</td>
-                        <td>{{d.preciounitario.toLocaleString()}}</td>
+                        <td>{{d.precioUnitario.toLocaleString()}}</td>
                         <td>{{d.monto.toLocaleString()}}</td>
                         <td>{{d.impuesto.toLocaleString()}}%</td>
                     </tr>
@@ -45,7 +45,7 @@
         </div>
     </div>
 </div>
-<span id =a1 style="visibility: hidden;">
+<span id='a1' style="visibility: hidden;">
     <div id="Imprime">
     </div>
 </span>

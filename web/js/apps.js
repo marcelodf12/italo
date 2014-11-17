@@ -5,6 +5,12 @@
  */
 var facturaGlobal = new Object();
 var pagosGlobal = new Object();
+var repetir = function(caracter, cantidad) {
+    cadena = '';
+    for (i = 0; i < cantidad; i++)
+        cadena += caracter;
+    return cadena;
+};
 
 var iniciarFactura = function() {
     facturaGlobal.fecha = "";
@@ -57,6 +63,10 @@ Wssc.config(['$routeProvider', function($routeProvider) {
                 .when('/facturas/ver/:id', {
                     templateUrl: 'facturas/ver.html',
                     controller: 'facturasVerCtrl'
+                })
+                .when('/facturas/listar/', {
+                    templateUrl: 'facturas/listar.html',
+                    controller: 'facturasListarCtrl'
                 })
 
                 .otherwise({RedirectTo: '/'});
@@ -354,7 +364,7 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
             detalle.monto = monto;
             detalle.cantidad = 1;
             detalle.descripcion = "Pago " + mes + " " + titulo;
-            detalle.preciounitario = monto;
+            detalle.precioUnitario = monto;
             detalle.impuesto = 0;
             facturaGlobal.detallefacturaList.push(detalle);
             var fecha = new Date();
@@ -423,6 +433,11 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
 
     }]);
 Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+        var fecha = new Date();
+        f = fecha.toISOString().substr(2, 8);
+        f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
+
+        $scope.fecha = f;
 
         $scope.borrar = function(index) {
             facturaGlobal.total -= facturaGlobal.detallefacturaList[index].monto;
@@ -438,7 +453,7 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
                 detalle.monto = $scope.Nprecio * $scope.Ncantidad;
                 detalle.cantidad = parseInt($scope.Ncantidad);
                 detalle.descripcion = $scope.Ndescripcion;
-                detalle.preciounitario = parseInt($scope.Nprecio);
+                detalle.precioUnitario = parseInt($scope.Nprecio);
                 detalle.impuesto = parseInt($scope.Nimpuesto);
                 facturaGlobal.detallefacturaList.push(detalle);
                 $scope.factura.Nprecio.$pristine = true;
@@ -460,19 +475,23 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
                 delete facturaGlobal.detallefacturaList[x].iva10;
                 delete facturaGlobal.detallefacturaList[x].exenta;
             }
-            $http.post(url, facturaGlobal).
-                    success(function(data, status, headers, config) {
-                        if (confirm("Factura guardada correctamente. Desea imprimirla?")) {
-                            $location.path('facturas/ver/' + data);
-                        } else {
-                            $location.path('alumnos/listar');
-                        }
-                        iniciarFactura();
-                    }).
-                    error(function(data, status, headers, config) {
-                        alert("Se ha producido un error, reintente. Si el problema persiste reinicie el servidor");
-                        console.log(data);
-                    });
+            if (facturaGlobal.detallefacturaList.length > 0) {
+                if (confirm("Esta seguro que desea guardar la factura?")) {
+                    $http.post(url, facturaGlobal).
+                            success(function(data, status, headers, config) {
+                                $location.path('facturas/ver/' + data);
+                                iniciarFactura();
+                            }).
+                            error(function(data, status, headers, config) {
+                                alert("Se ha producido un error, reintente. Si el problema persiste reinicie el servidor");
+                                console.log(data);
+                            });
+                }
+                ;
+            } else {
+                alert("La factura no contiene detalles");
+            }
+            ;
 
 
 
@@ -480,7 +499,7 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
         init = function() {
             $scope.nombre = facturaGlobal.nombre;
             $scope.ruc = facturaGlobal.ruc;
-            $scope.fecha = facturaGlobal.fecha;
+            $scope.fecha = f;
             $scope.detalles = facturaGlobal.detallefacturaList;
             facturaGlobal.total = 0;
             facturaGlobal.iva5 = 0;
@@ -490,15 +509,15 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
                 $scope.detalles[x].index = x;
                 if (facturaGlobal.detallefacturaList[x].impuesto === 0) {
                     console.log("impuesto 0");
-                    $scope.detalles[x].exenta = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    $scope.detalles[x].exenta = facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
                     facturaGlobal.exenta += facturaGlobal.detallefacturaList[x].monto;
                 } else if (facturaGlobal.detallefacturaList[x].impuesto === 5) {
                     console.log("impuesto 5");
-                    $scope.detalles[x].iva5 = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    $scope.detalles[x].iva5 = facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
                     facturaGlobal.iva5 += facturaGlobal.detallefacturaList[x].monto / 21;
                 } else if (facturaGlobal.detallefacturaList[x].impuesto === 10) {
                     console.log("impuesto 10");
-                    $scope.detalles[x].iva10 = facturaGlobal.detallefacturaList[x].preciounitario * facturaGlobal.detallefacturaList[x].cantidad;
+                    $scope.detalles[x].iva10 = facturaGlobal.detallefacturaList[x].precioUnitario * facturaGlobal.detallefacturaList[x].cantidad;
                     facturaGlobal.iva10 += facturaGlobal.detallefacturaList[x].monto / 11;
                 } else {
                     console.log("que paso?");
@@ -534,41 +553,52 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                 });
         var texto = new String();
         $scope.imprimir = function() {
-            texto='Datos Personales:\n';
-            texto+='Nombre: ';
-            texto+=$scope.factura.nombre;
-            texto+='\n';
-            texto+='Ruc: ';
-            texto+=$scope.factura.ruc;
-            texto+='\n';
-            texto+='Dirección: ';
-            texto+=$scope.factura.direccion;
-            texto+='\n';
-            texto+='Fecha: ';
-            texto+=$scope.factura.fecha;
-            texto+='\n';
+            texto += $scope.factura.nombre;
+            texto += '<br>';
+            texto += $scope.factura.ruc;
+            texto += '<br>';
+            texto += $scope.factura.direccion;
+            texto += '<br>';
+            texto += $scope.factura.fecha;
+            texto += '<br>\n';
+            texto += "<TABLE>\n";
             for (i = 0; i < $scope.factura.detallefacturaList.length; i++) {
+                texto += "<tr>\n";
                 d = $scope.factura.detallefacturaList[i];
-                texto+=d.cantidad;
-                texto+='\t';
-                texto+=d.descripcion;
-                texto+='\t';
-                texto+=d.preciounitario;
-                texto+='\t';
-                texto+=d.monto;
-                texto+='\t';
+                texto += "<td width=50>\n";
+                texto += d.cantidad;
+                texto += "</td>\n";
+
+                texto += "<td width=200>\n";
+                texto += d.descripcion;
+                texto += "</td>\n";
+
+                texto += "<td width=50>\n";
+                texto += d.precioUnitario;
+                texto += "</td>\n";
+
+                texto += "<td width=50>\n";
+                texto += d.monto;
+                texto += "</td>\n";
+                texto += "</tr>\n";
+
             }
+            texto += "</table>";
+            //texto = '';
+            //for(i=0;i<50;i++)
+            //    for(k=0;k<10;k++)
+            //        texto+=k.toString();
             ImprimirVar(texto);
         };
         function ImprimirVar(texto) {
             if (document.getElementById != null)
             {
-                var htmlcode = '<HTML>\n<HEAD>\n';
+                var htmlcode = '<HTML>\n<HEAD></HEAD>\n<BODY style="font: 100% serif;">';
                 if (document.getElementsByTagName != null)
                 {
                     htmlcode += texto.toString();
                 }
-                htmlcode += '\n</HE' + 'AD>\n<BODY>\n\<SCRIPT>';
+                htmlcode += '\n\<SCRIPT>';
                 var ImprimeElem = document.getElementById("Imprime");
 
                 if (ImprimeElem != null)
@@ -588,10 +618,28 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                 printing.document.write(htmlcode);
                 printing.document.close();
                 printing.print();
+                printing.close();
             }
             else
             {
                 alert("Se ha generado un problema...por favor revise que la version de su navegador sea la mas reciente");
             }
         }
+    }]);
+//Controlador para listar facturas
+Wssc.controller('facturasListarCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+        var fecha = new Date();
+        f = fecha.toISOString().substr(2, 8);
+        f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
+        $scope.fecha=f;
+        $scope.listar = function() {
+            $http.get("webresources/italo.facturas/fecha/" + $scope.fecha).
+                            success(function(data, status, headers, config) {
+                                $scope.facturas=data;
+                                console.log(data);
+                            }).
+                            error(function(data, status, headers, config) {
+                                console.log(data);
+                            });
+        };
     }]);

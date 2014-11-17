@@ -102,6 +102,16 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
     public List<Facturas> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
+    
+    @GET
+    @Path("fecha/{fecha}")
+    @Produces({"application/xml", "application/json"})
+    public List<Facturas> findFecha(@PathParam("fecha") String fecha) {
+        List<Facturas> facturas = em.createQuery("SELECT f FROM Facturas f WHERE (f.fecha LIKE :fecha)")
+                .setParameter("fecha", "%" +fecha + "%")
+                .getResultList();
+        return facturas;
+    }
 
     @GET
     @Path("count")
