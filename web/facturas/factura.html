@@ -42,7 +42,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="inputDireccion" class="col-lg-2 control-label">Direccion</label>
                     <div class="col-lg-10">
@@ -52,6 +51,12 @@
                                 Maximo 100 letras
                             </p>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputTotal" class="col-lg-2 control-label">Total Actual</label>
+                    <div class="col-lg-10">
+                        {{labelTotal}}
                     </div>
                 </div>
             </div></div>
@@ -89,7 +94,7 @@
                     {{factura.Nprecio.$pristine}}
                     {{!factura.Ncantidad.$invalid}}
                     {{factura.Ncantidad.$pristine}}
-                    <div ng-hide="(!factura.Nprecio.$invalid && !factura.Ncantidad.$invalid) || (factura.Nprecio.$pristine  || factura.Ncantidad.$pristine)">
+                    <div ng-hide="(!factura.Nprecio.$invalid && !factura.Ncantidad.$invalid) || (factura.Nprecio.$pristine || factura.Ncantidad.$pristine)">
                         <p class="text-danger">
                             Cantidad y Precio unitario deben ser solo numeros. Campos Obligatorios
                         </p>

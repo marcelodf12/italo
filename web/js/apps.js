@@ -54,6 +54,10 @@ Wssc.config(['$routeProvider', function($routeProvider) {
                     templateUrl: 'facturas/factura.html',
                     controller: 'facturasActualCtrl'
                 })
+                .when('/facturas/ver/:id', {
+                    templateUrl: 'facturas/ver.html',
+                    controller: 'facturasVerCtrl'
+                })
 
                 .otherwise({RedirectTo: '/'});
     }]);
@@ -92,7 +96,7 @@ Wssc.controller('alumnosAltaCtrl', ['$scope', '$http', function($scope, $http) {
                                 if (data.toString().search(txt) > 0) {
                                     alert("El numero de cedula " + alumno.cedula + " ya esta registrado");
                                 } else {
-                                    alert("Ha ocurrido un error");
+                                    alert("Ha ocurrido un error. Reintente, y si el problema persiste reinicie el servidor");
                                 }
                             });
                     console.log(alumno);
@@ -222,7 +226,7 @@ Wssc.controller('alumnosModificarCtrl', ['$scope', '$http', '$routeParams', '$lo
                                 if (data.toString().search(txt) > 0) {
                                     alert("El numero de cedula " + alumno.cedula + " ya esta registrado");
                                 } else {
-                                    alert("Ha ocurrido un error");
+                                    alert("Ha ocurrido un error. Reintente, y si el problema persiste reinicie el servidor");
                                 }
                             });
                     console.log(alumno);
@@ -419,11 +423,14 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
 
     }]);
 Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+
         $scope.borrar = function(index) {
+            facturaGlobal.total -= facturaGlobal.detallefacturaList[index].monto;
             $scope.detalles.splice(index, 1);
             for (x = 0; x < facturaGlobal.detallefacturaList.length; x++) {
                 $scope.detalles[x].index = x;
             }
+            $scope.labelTotal = facturaGlobal.total.toLocaleString();
         };
         $scope.agregar = function() {
             if (!$scope.factura.Nprecio.$invalid && !$scope.factura.Ncantidad.$invalid) {
@@ -442,6 +449,7 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
                 facturaGlobal.direccion = $scope.direccion;
                 init();
             }
+
         };
         $scope.guardar = function() {
             console.log(facturaGlobal);
@@ -454,9 +462,15 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
             }
             $http.post(url, facturaGlobal).
                     success(function(data, status, headers, config) {
-                        console.log(data);
+                        if (confirm("Factura guardada correctamente. Desea imprimirla?")) {
+                            $location.path('facturas/ver/' + data);
+                        } else {
+                            $location.path('alumnos/listar');
+                        }
+                        iniciarFactura();
                     }).
                     error(function(data, status, headers, config) {
+                        alert("Se ha producido un error, reintente. Si el problema persiste reinicie el servidor");
                         console.log(data);
                     });
 
@@ -500,6 +514,84 @@ Wssc.controller('facturasActualCtrl', ['$scope', '$http', '$routeParams', '$loca
             $scope.Ndescripcion = "";
             $scope.Nprecio = "";
             $scope.Nimpuesto = 10;
+            $scope.labelTotal = facturaGlobal.total.toLocaleString();
         };
         init();
+    }]);
+
+//Controlador para ver facturas
+Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$location', function($scope, $http, $routeParams, $location) {
+        var id = $routeParams.id.toString();
+        url = "webresources/italo.facturas/" + id;
+        $http.get(url).
+                success(function(data, status, headers, config) {
+                    console.log(data);
+                    $scope.factura = data;
+                }).
+                error(function(data, status, headers, config) {
+                    alert("Se ha producido un error, reintente. Si el problema persiste reinicie el servidor");
+                    console.log(data);
+                });
+        var texto = new String();
+        $scope.imprimir = function() {
+            texto='Datos Personales:\n';
+            texto+='Nombre: ';
+            texto+=$scope.factura.nombre;
+            texto+='\n';
+            texto+='Ruc: ';
+            texto+=$scope.factura.ruc;
+            texto+='\n';
+            texto+='Dirección: ';
+            texto+=$scope.factura.direccion;
+            texto+='\n';
+            texto+='Fecha: ';
+            texto+=$scope.factura.fecha;
+            texto+='\n';
+            for (i = 0; i < $scope.factura.detallefacturaList.length; i++) {
+                d = $scope.factura.detallefacturaList[i];
+                texto+=d.cantidad;
+                texto+='\t';
+                texto+=d.descripcion;
+                texto+='\t';
+                texto+=d.preciounitario;
+                texto+='\t';
+                texto+=d.monto;
+                texto+='\t';
+            }
+            ImprimirVar(texto);
+        };
+        function ImprimirVar(texto) {
+            if (document.getElementById != null)
+            {
+                var htmlcode = '<HTML>\n<HEAD>\n';
+                if (document.getElementsByTagName != null)
+                {
+                    htmlcode += texto.toString();
+                }
+                htmlcode += '\n</HE' + 'AD>\n<BODY>\n\<SCRIPT>';
+                var ImprimeElem = document.getElementById("Imprime");
+
+                if (ImprimeElem != null)
+                {
+                    htmlcode += ImprimeElem.innerHTML;
+                }
+                else
+                {
+                    alert("No es posible encontrar la seccion a imprimir en el HTML");
+                    return;
+                }
+
+                htmlcode += '</SCR' + 'IPT>\n</BO' + 'DY>\n</HT' + 'ML>';
+
+                var printing = window.open("", "ImprimirVar");
+                printing.document.open();
+                printing.document.write(htmlcode);
+                printing.document.close();
+                printing.print();
+            }
+            else
+            {
+                alert("Se ha generado un problema...por favor revise que la version de su navegador sea la mas reciente");
+            }
+        }
     }]);

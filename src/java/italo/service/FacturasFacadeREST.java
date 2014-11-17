@@ -40,8 +40,7 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
 
     @POST
     @Consumes({"application/xml", "application/json"})
-    @Override
-    public void create(Facturas entity) {
+    public String crear(Facturas entity) {
         for (Detallefactura d : entity.getDetallefacturaList()) {
             System.out.println(d.getDescripcion());
         }
@@ -60,6 +59,7 @@ public class FacturasFacadeREST extends AbstractFacade<Facturas> {
             p.setFkMatricula(m);
         }
         super.edit(entity);
+        return entity.getId().toString();
     }
 
     @PUT
