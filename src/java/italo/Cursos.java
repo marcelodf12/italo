@@ -9,6 +9,7 @@ package italo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class Cursos implements Serializable {
     @Size(max = 1)
     @Column(name = "seccion", length = 1)
     private String seccion;
-    @OneToMany(mappedBy = "fkCurso")
+    @OneToMany(mappedBy = "fkCurso", cascade = CascadeType.ALL)
     private List<Matriculas> matriculasList;
 
     public Cursos() {

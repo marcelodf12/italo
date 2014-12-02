@@ -331,6 +331,8 @@ Wssc.controller('alumnosMatricularCtrl', ['$scope', '$http', '$routeParams', '$l
             console.log(matricula);
             $http.post("webresources/italo.matriculas/", matricula).success(function(data, status, headers, config) {
                 console.log(data);
+                alert("Se matriculado a " + alumno.nombre + " " + alumno.apellido + " en " + matricula.fkCurso.nivel.toString() + " " + matricula.fkCurso.especialidad.toString());
+                $location.path('alumnos/' + alumno.id);
             }).
                     error(function(data, status, headers, config) {
                         console.log(data);
@@ -553,15 +555,28 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                 });
         var texto = new String();
         $scope.imprimir = function() {
-            texto += $scope.factura.nombre;
-            texto += '<br>';
-            texto += $scope.factura.ruc;
-            texto += '<br>';
-            texto += $scope.factura.direccion;
-            texto += '<br>';
+            texto += "<TABLE HEIGTH='100'>\n";
+            texto += "<tr>\n";
+            texto += "<td width=200>\n";
             texto += $scope.factura.fecha;
-            texto += '<br>\n';
-            texto += "<TABLE>\n";
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += 'x';
+            texto += "</td>\n";
+            texto += "</tr>\n";
+            texto += "<tr>\n";
+            texto += "<td width=200>\n";
+            texto += $scope.factura.nombre;
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += $scope.factura.ruc;
+            texto += "</td>\n";
+            texto += "</tr>\n";
+            texto += "<tr>\n";
+            texto += $scope.factura.direccion;
+            texto += "</tr>\n";
+            texto += "</table>";
+            texto += "<TABLE HEIGTH='250'>\n";
             for (i = 0; i < $scope.factura.detallefacturaList.length; i++) {
                 texto += "<tr>\n";
                 d = $scope.factura.detallefacturaList[i];
@@ -577,12 +592,69 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                 texto += d.precioUnitario;
                 texto += "</td>\n";
 
+
+                //EXENTA
                 texto += "<td width=50>\n";
-                texto += d.monto;
+                if(d.impuesto===0)
+                    texto += d.monto;
                 texto += "</td>\n";
+
+                //5%
+                texto += "<td width=50>\n";
+                if(d.impuesto===5)
+                    texto += d.monto;
+                texto += "</td>\n";
+
+
+                //10%
+                texto += "<td width=50>\n";
+                if(d.impuesto===10)
+                    texto += d.monto;
+                texto += "</td>\n";
+
                 texto += "</tr>\n";
 
             }
+            texto += "</table>";
+            texto += "<TABLE HEIGTH='250'>\n";
+            
+            texto += "<tr>\n";
+            texto += "<td width=200>\n";
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += $scope.factura.exenta;
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += $scope.factura.iva5;
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += $scope.factura.iva10;
+            texto += "</td>\n";
+            texto += "</tr>\n";
+            
+            texto += "<tr>\n";
+            texto += "<td width=70>\n";
+            texto += "</td>\n";
+            iva5=$scope.factura.iva5/21;
+            iva10=$scope.factura.iva10/21;
+            ivaT = iva5 + iva10;
+            texto += "<td width=50>\n";
+            texto += iva5.toLocaleString();
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += iva10.toLocateString();
+            texto += "</td>\n";
+            texto += "<td width=50>\n";
+            texto += ivaT.toLocateString();
+            texto += "</td>\n";
+            texto += "</tr>\n";
+            
+            texto += "<tr>\n";
+            texto += "<td width=50>\n";
+            texto += $scope.factura.total;
+            texto += "</td>\n";
+            texto += "</tr>\n";
+            
             texto += "</table>";
             //texto = '';
             //for(i=0;i<50;i++)

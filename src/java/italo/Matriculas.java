@@ -55,9 +55,9 @@ public class Matriculas implements Serializable {
     private Integer matricula;
     @Column(name = "examen")
     private Integer examen;
-    @OneToMany(mappedBy = "fkMatricula")
+    @OneToMany(mappedBy = "fkMatricula",cascade = CascadeType.ALL)
     private List<Cuotas> cuotasList;
-    @OneToMany(mappedBy = "fkMatricula")
+    @OneToMany(mappedBy = "fkMatricula",cascade = CascadeType.ALL)
     private List<Pagos> pagosList;
     @JoinColumn(name = "fk_promocion", referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.ALL)

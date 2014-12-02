@@ -9,6 +9,7 @@ package italo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -72,7 +73,7 @@ public class Alumnos implements Serializable {
     @Size(max = 1)
     @Column(name = "sexo", length = 1)
     private String sexo;
-    @OneToMany(mappedBy = "fkAlumno")
+    @OneToMany(mappedBy = "fkAlumno", cascade = CascadeType.ALL)
     private List<Matriculas> matriculasList;
 
     public Alumnos() {

@@ -32,7 +32,7 @@
                     <label for="nivel" class="col-lg-2 control-label">Nivel</label>
                     <div class="col-lg-10">
                         <select class="form-control" id="nivel" ng-model="curso">
-                            <option ng-repeat="c in cursos" value="{{c}}">{{c.nivel}}º {{c.seccion}}</option>
+                            <option ng-repeat="c in cursos" value="{{c}}">{{c.nivel}}º seccion: {{c.seccion}} turno: {{c.turno}}</option>
                         </select>
                     </div>
                 </div>
