@@ -555,106 +555,179 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                 });
         var texto = new String();
         $scope.imprimir = function() {
-            texto += "<TABLE HEIGTH='100'>\n";
+            texto = "";
+            texto += "<STYLE>";
+            texto += "table {";
+            texto += "border-collapse: collapse;";
+            //texto += "border: black 0.5px solid;";
+            texto += "font-size: 8pt;";
+            texto += "font-family: sans-serif;";
+            texto += "}";
+            texto += "td {";
+            //texto += "border: black 0.5px solid;";
+            texto += "}";
+            texto += "</STYLE>";
+
+            texto += "<TABLE width=710>\n";
             texto += "<tr>\n";
-            texto += "<td width=200>\n";
+            texto += "<td width=70>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
+            texto += "<td width=360>\n";
             texto += $scope.factura.fecha;
             texto += "</td>\n";
-            texto += "<td width=50>\n";
+            texto += "<td width=77>\n";
             texto += 'x';
             texto += "</td>\n";
+            texto += "<td width=203>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
             texto += "</tr>\n";
+
             texto += "<tr>\n";
-            texto += "<td width=200>\n";
+            texto += "<td width=38>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
+            texto += "<td width=540 colspan='2'>\n";
             texto += $scope.factura.nombre;
             texto += "</td>\n";
-            texto += "<td width=50>\n";
+            texto += "<td width=132>\n";
             texto += $scope.factura.ruc;
             texto += "</td>\n";
             texto += "</tr>\n";
+
             texto += "<tr>\n";
+            texto += "<td width=38>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
+            texto += "<td width=672>\n";
+            texto += "&nbsp";
             texto += $scope.factura.direccion;
+            texto += "</td>\n";
             texto += "</tr>\n";
             texto += "</table>";
-            texto += "<TABLE HEIGTH='250'>\n";
+            texto += "<br />";
+            texto += "<br />";
+            texto += "<TABLE width=710>\n";
+            cantD = $scope.factura.detallefacturaList.length;
+            t5 = 0;
+            t10 = 0;
             for (i = 0; i < $scope.factura.detallefacturaList.length; i++) {
                 texto += "<tr>\n";
                 d = $scope.factura.detallefacturaList[i];
-                texto += "<td width=50>\n";
+                texto += "<td width=40>\n";
+                texto += d.id;
+                texto += "</td>\n";
+                texto += "<td width=69>\n";
                 texto += d.cantidad;
                 texto += "</td>\n";
 
-                texto += "<td width=200>\n";
+                texto += "<td width=335>\n";
                 texto += d.descripcion;
                 texto += "</td>\n";
 
-                texto += "<td width=50>\n";
-                texto += d.precioUnitario;
+                texto += "<td width=67>\n";
+                texto += d.precioUnitario.toLocaleString();
                 texto += "</td>\n";
 
 
                 //EXENTA
-                texto += "<td width=50>\n";
-                if(d.impuesto===0)
-                    texto += d.monto;
+                texto += "<td width=67>\n";
+                texto += "&nbsp";
+                if (d.impuesto === 0)
+                    texto += d.monto.toLocaleString();
                 texto += "</td>\n";
 
                 //5%
-                texto += "<td width=50>\n";
-                if(d.impuesto===5)
-                    texto += d.monto;
+                texto += "<td width=67>\n";
+                texto += "&nbsp";
+                if (d.impuesto === 5) {
+                    t5 += d.monto;
+                    texto += d.monto.toLocaleString();
+                }
                 texto += "</td>\n";
 
 
                 //10%
-                texto += "<td width=50>\n";
-                if(d.impuesto===10)
-                    texto += d.monto;
+                texto += "<td width=67>\n";
+                texto += "&nbsp";
+                if (d.impuesto === 10) {
+                    t10 += d.monto;
+                    texto += d.monto.toLocaleString();
+                }
                 texto += "</td>\n";
 
                 texto += "</tr>\n";
 
             }
+            for (i = 0; i < 14 - cantD; i++) {
+                texto += "<tr>\n";
+                texto += "<td>\n";
+                texto += "&nbsp";
+                texto += "</td>\n";
+                texto += "</tr>\n";
+            }
             texto += "</table>";
-            texto += "<TABLE HEIGTH='250'>\n";
-            
+            texto += "<TABLE width=730>\n";
+
             texto += "<tr>\n";
-            texto += "<td width=200>\n";
+            texto += "<td width=154>\n";
+            texto += "&nbsp";
             texto += "</td>\n";
-            texto += "<td width=50>\n";
-            texto += $scope.factura.exenta;
+            texto += "<td width=114>\n";
+            texto += "&nbsp";
             texto += "</td>\n";
-            texto += "<td width=50>\n";
-            texto += $scope.factura.iva5;
+            texto += "<td width=154>\n";
+            texto += "&nbsp";
             texto += "</td>\n";
-            texto += "<td width=50>\n";
-            texto += $scope.factura.iva10;
+            texto += "<td width=107>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
+            texto += "<td width=67>\n";
+            texto += "&nbsp";
+            texto += $scope.factura.exenta.toLocaleString();
+            texto += "</td>\n";
+            texto += "<td width=67>\n";
+            texto += "&nbsp";
+            texto += t5.toLocaleString();
+            texto += "</td>\n";
+            texto += "<td width=67>\n";
+            texto += "&nbsp";
+            texto += t10.toLocaleString();
             texto += "</td>\n";
             texto += "</tr>\n";
-            
+
             texto += "<tr>\n";
-            texto += "<td width=70>\n";
+            texto += "<td width=154>\n";
+            texto += "&nbsp";
             texto += "</td>\n";
-            iva5=$scope.factura.iva5/21;
-            iva10=$scope.factura.iva10/21;
+            iva5 = $scope.factura.iva5;
+            iva10 = $scope.factura.iva10;
             ivaT = iva5 + iva10;
-            texto += "<td width=50>\n";
+            texto += "<td width=114>\n";
             texto += iva5.toLocaleString();
             texto += "</td>\n";
-            texto += "<td width=50>\n";
-            texto += iva10.toLocateString();
+            texto += "<td width=154>\n";
+            texto += iva10.toLocaleString();
             texto += "</td>\n";
-            texto += "<td width=50>\n";
-            texto += ivaT.toLocateString();
+            texto += "<td width=308 colspan='4'>\n";
+            texto += ivaT.toLocaleString();
             texto += "</td>\n";
             texto += "</tr>\n";
-            
+
             texto += "<tr>\n";
-            texto += "<td width=50>\n";
-            texto += $scope.factura.total;
+            texto += "<td>\n";
+            texto += "<br><br>&nbsp";
+            texto += "</td>\n";
+            texto += "<td>\n";
+            texto += "&nbsp";
+            texto += "</td>\n";
+            texto += "<td  colspan='5'>\n";
+            texto += NumeroALetras($scope.factura.total);
+            texto += $scope.factura.total.toLocaleString() + "# )";
             texto += "</td>\n";
             texto += "</tr>\n";
-            
+
             texto += "</table>";
             //texto = '';
             //for(i=0;i<50;i++)
@@ -662,6 +735,213 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
             //        texto+=k.toString();
             ImprimirVar(texto);
         };
+
+
+
+
+
+
+
+
+
+
+
+        function Unidades(num) {
+
+            switch (num)
+            {
+                case 1:
+                    return "UN";
+                case 2:
+                    return "DOS";
+                case 3:
+                    return "TRES";
+                case 4:
+                    return "CUATRO";
+                case 5:
+                    return "CINCO";
+                case 6:
+                    return "SEIS";
+                case 7:
+                    return "SIETE";
+                case 8:
+                    return "OCHO";
+                case 9:
+                    return "NUEVE";
+            }
+
+            return "";
+        }
+
+        function Decenas(num) {
+
+            decena = Math.floor(num / 10);
+            unidad = num - (decena * 10);
+
+            switch (decena)
+            {
+                case 1:
+                    switch (unidad)
+                    {
+                        case 0:
+                            return "DIEZ";
+                        case 1:
+                            return "ONCE";
+                        case 2:
+                            return "DOCE";
+                        case 3:
+                            return "TRECE";
+                        case 4:
+                            return "CATORCE";
+                        case 5:
+                            return "QUINCE";
+                        default:
+                            return "DIECI" + Unidades(unidad);
+                    }
+                case 2:
+                    switch (unidad)
+                    {
+                        case 0:
+                            return "VEINTE";
+                        default:
+                            return "VEINTI" + Unidades(unidad);
+                    }
+                case 3:
+                    return DecenasY("TREINTA", unidad);
+                case 4:
+                    return DecenasY("CUARENTA", unidad);
+                case 5:
+                    return DecenasY("CINCUENTA", unidad);
+                case 6:
+                    return DecenasY("SESENTA", unidad);
+                case 7:
+                    return DecenasY("SETENTA", unidad);
+                case 8:
+                    return DecenasY("OCHENTA", unidad);
+                case 9:
+                    return DecenasY("NOVENTA", unidad);
+                case 0:
+                    return Unidades(unidad);
+            }
+        }//Unidades()
+
+        function DecenasY(strSin, numUnidades) {
+            if (numUnidades > 0)
+                return strSin + " Y " + Unidades(numUnidades)
+
+            return strSin;
+        }//DecenasY()
+
+        function Centenas(num) {
+
+            centenas = Math.floor(num / 100);
+            decenas = num - (centenas * 100);
+
+            switch (centenas)
+            {
+                case 1:
+                    if (decenas > 0)
+                        return "CIENTO " + Decenas(decenas);
+                    return "CIEN";
+                case 2:
+                    return "DOSCIENTOS " + Decenas(decenas);
+                case 3:
+                    return "TRESCIENTOS " + Decenas(decenas);
+                case 4:
+                    return "CUATROCIENTOS " + Decenas(decenas);
+                case 5:
+                    return "QUINIENTOS " + Decenas(decenas);
+                case 6:
+                    return "SEISCIENTOS " + Decenas(decenas);
+                case 7:
+                    return "SETECIENTOS " + Decenas(decenas);
+                case 8:
+                    return "OCHOCIENTOS " + Decenas(decenas);
+                case 9:
+                    return "NOVECIENTOS " + Decenas(decenas);
+            }
+
+            return Decenas(decenas);
+        }//Centenas()
+
+        function Seccion(num, divisor, strSingular, strPlural) {
+            cientos = Math.floor(num / divisor)
+            resto = num - (cientos * divisor)
+
+            letras = "";
+
+            if (cientos > 0)
+                if (cientos > 1)
+                    letras = Centenas(cientos) + " " + strPlural;
+                else
+                    letras = strSingular;
+
+            if (resto > 0)
+                letras += "";
+
+            return letras;
+        }//Seccion()
+
+        function Miles(num) {
+            divisor = 1000;
+            cientos = Math.floor(num / divisor)
+            resto = num - (cientos * divisor)
+
+            strMiles = Seccion(num, divisor, "UN MIL", "MIL");
+            strCentenas = Centenas(resto);
+
+            if (strMiles == "")
+                return strCentenas;
+
+            return strMiles + " " + strCentenas;
+
+            //return Seccion(num, divisor, "UN MIL", "MIL") + " " + Centenas(resto);
+        }//Miles()
+
+        function Millones(num) {
+            divisor = 1000000;
+            cientos = Math.floor(num / divisor)
+            resto = num - (cientos * divisor)
+
+            strMillones = Seccion(num, divisor, "UN MILLON", "MILLONES");
+            strMiles = Miles(resto);
+
+            if (strMillones == "")
+                return strMiles;
+
+            return strMillones + " " + strMiles;
+
+            //return Seccion(num, divisor, "UN MILLON", "MILLONES") + " " + Miles(resto);
+        }//Millones()
+
+        function NumeroALetras(num) {
+            var data = {
+                numero: num,
+                enteros: Math.floor(num),
+                centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
+                letrasCentavos: "",
+                letrasMonedaPlural: " (Gs ",
+                letrasMonedaSingular: " (Gs "
+            };
+
+            if (data.centavos > 0)
+                data.letrasCentavos = "CON " + data.centavos + "/100";
+
+            if (data.enteros == 0)
+                return "CERO " + data.letrasMonedaPlural + " " + data.letrasCentavos;
+            if (data.enteros == 1)
+                return Millones(data.enteros) + " " + data.letrasMonedaSingular + " " + data.letrasCentavos;
+            else
+                return Millones(data.enteros) + " " + data.letrasMonedaPlural + " " + data.letrasCentavos;
+        }//NumeroALetras()
+
+
+
+
+
+
+
+
         function ImprimirVar(texto) {
             if (document.getElementById != null)
             {
@@ -683,14 +963,14 @@ Wssc.controller('facturasVerCtrl', ['$scope', '$http', '$routeParams', '$locatio
                     return;
                 }
 
-                htmlcode += '</SCR' + 'IPT>\n</BO' + 'DY>\n</HT' + 'ML>';
+                htmlcode += '</SCRIPT>\n</BODY>\n</HTML>';
 
                 var printing = window.open("", "ImprimirVar");
                 printing.document.open();
                 printing.document.write(htmlcode);
                 printing.document.close();
                 printing.print();
-                printing.close();
+                //printing.close();
             }
             else
             {
@@ -703,15 +983,15 @@ Wssc.controller('facturasListarCtrl', ['$scope', '$http', '$routeParams', '$loca
         var fecha = new Date();
         f = fecha.toISOString().substr(2, 8);
         f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
-        $scope.fecha=f;
+        $scope.fecha = f;
         $scope.listar = function() {
             $http.get("webresources/italo.facturas/fecha/" + $scope.fecha).
-                            success(function(data, status, headers, config) {
-                                $scope.facturas=data;
-                                console.log(data);
-                            }).
-                            error(function(data, status, headers, config) {
-                                console.log(data);
-                            });
+                    success(function(data, status, headers, config) {
+                        $scope.facturas = data;
+                        console.log(data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        console.log(data);
+                    });
         };
     }]);
