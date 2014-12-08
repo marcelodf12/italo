@@ -358,30 +358,43 @@ Wssc.controller('alumnosCuotasCtrl', ['$scope', '$http', '$routeParams', '$locat
         meses[11] = "Noviembre";
         meses[12] = "Derecho";
         $scope.mes = "";
-
+        $scope.verFactura = function(id) {
+            $http.get("webresources/italo.pagos/factura/" + id.toString()).
+                    success(function(data, status, headers, config) {
+                        $location.path('facturas/ver/' + data);
+                    }).
+                    error(function(data, status, headers, config) {
+                        alert("Se ha producido un error, reintente. Si el problema persiste reinicie el servidor");
+                        console.log(data);
+                    });
+        };
         $scope.pagar = function(monto, mes, titulo) {
-            console.log("pagos");
-            console.log(monto);
-            detalle = new Object();
-            detalle.monto = monto;
-            detalle.cantidad = 1;
-            detalle.descripcion = "Pago " + mes + " " + titulo;
-            detalle.precioUnitario = monto;
-            detalle.impuesto = 0;
-            facturaGlobal.detallefacturaList.push(detalle);
-            var fecha = new Date();
-            f = fecha.toISOString().substr(2, 8);
-            f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
-            pago = new Object();
-            pago.fecha = f;
-            pago.monto = monto;
-            pago.fkMatricula = $scope.cuotas[1].fkMatricula;
-            facturaGlobal.pagosList.push(pago);
-            alert("Se ha agregado " + detalle.descripcion + "a la factura por el monto de " + detalle.monto);
-            facturaGlobal.fecha = f;
-            facturaGlobal.ruc = $scope.cuotas[1].fkMatricula.fkAlumno.cedulaResponsable;
-            facturaGlobal.nombre = $scope.cuotas[1].fkMatricula.fkAlumno.responsable;
-            console.log(facturaGlobal);
+            if (isNaN(monto)) {
+                alert("El valor de 'Monto' es inválido");
+            } else {
+                console.log("pagos");
+                console.log(monto);
+                detalle = new Object();
+                detalle.monto = monto;
+                detalle.cantidad = 1;
+                detalle.descripcion = "Pago " + mes + " " + titulo;
+                detalle.precioUnitario = monto;
+                detalle.impuesto = 0;
+                facturaGlobal.detallefacturaList.push(detalle);
+                var fecha = new Date();
+                f = fecha.toISOString().substr(2, 8);
+                f = f.substr(6, 2) + "-" + f.substr(3, 2) + "-" + f.substr(0, 2);
+                pago = new Object();
+                pago.fecha = f;
+                pago.monto = monto;
+                pago.fkMatricula = $scope.cuotas[1].fkMatricula;
+                facturaGlobal.pagosList.push(pago);
+                alert("Se ha agregado " + detalle.descripcion + "a la factura por el monto de " + detalle.monto);
+                facturaGlobal.fecha = f;
+                facturaGlobal.ruc = $scope.cuotas[1].fkMatricula.fkAlumno.cedulaResponsable;
+                facturaGlobal.nombre = $scope.cuotas[1].fkMatricula.fkAlumno.responsable;
+                console.log(facturaGlobal);
+            }
         };
 
         $http.get(url).

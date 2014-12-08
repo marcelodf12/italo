@@ -61,8 +61,8 @@ public class MatriculasFacadeREST extends AbstractFacade<Matriculas> {
         System.out.println("parametro");
         List<Pagos> pagos = q.getResultList();
         System.out.println("leer la lista");
-        for(Pagos p:pagos)
-            p.setFkFactura(null);
+        //for(Pagos p:pagos)
+        //    p.setFkFactura(null);
         return pagos;
     }
 

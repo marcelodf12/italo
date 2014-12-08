@@ -6,6 +6,7 @@
 
 package italo.service;
 
+import italo.Facturas;
 import italo.Pagos;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -60,6 +61,15 @@ public class PagosFacadeREST extends AbstractFacade<Pagos> {
     @Produces({"application/xml", "application/json"})
     public Pagos find(@PathParam("id") Integer id) {
         return super.find(id);
+    }
+    
+    @GET
+    @Path("/factura/{id}")
+    @Produces("text/plain")
+    public String findFactura(@PathParam("id") Integer id) {
+        Facturas f = super.find(id).getFkFactura();
+        System.out.println(f);
+        return f.getId().toString();
     }
 
     @GET
